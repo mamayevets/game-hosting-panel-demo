@@ -159,10 +159,10 @@ const stats = computed(() => [
                 <span class="capitalize">last {{ range === '7d' ? '7 days' : range === '30d' ? '30 days' : '3 months' }}</span>
               </CardDescription>
             </div>
-            <ToggleGroup v-model="range" type="single" variant="outline" size="sm" class="shrink-0">
-              <ToggleGroupItem value="90d" class="text-xs px-2 sm:px-3">3 mo</ToggleGroupItem>
-              <ToggleGroupItem value="30d" class="text-xs px-2 sm:px-3">30 d</ToggleGroupItem>
-              <ToggleGroupItem value="7d" class="text-xs px-2 sm:px-3">7 d</ToggleGroupItem>
+            <ToggleGroup v-model="range" type="single" variant="outline" class="shrink-0 w-full sm:w-auto grid grid-cols-3 sm:flex">
+              <ToggleGroupItem value="90d" class="text-sm px-3 sm:px-4 h-9">3 months</ToggleGroupItem>
+              <ToggleGroupItem value="30d" class="text-sm px-3 sm:px-4 h-9">30 days</ToggleGroupItem>
+              <ToggleGroupItem value="7d" class="text-sm px-3 sm:px-4 h-9">7 days</ToggleGroupItem>
             </ToggleGroup>
           </CardHeader>
           <CardContent class="px-2 sm:px-4 pt-6">

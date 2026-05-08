@@ -3,12 +3,11 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { backups } from '@/data/activity'
 import GameIcon from '@/components/GameIcon.vue'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { MoreHorizontal, Download, History, ExternalLink, Database, HardDrive, Clock } from 'lucide-vue-next'
+import { MoreHorizontal, Download, History, ExternalLink, Database, HardDrive, Clock, Plus } from 'lucide-vue-next'
 import { motion } from 'motion-v'
 import { toast } from 'vue-sonner'
 
@@ -36,94 +35,87 @@ function openServer(id: string) {
 }
 
 const statusBadgeClass: Record<'completed' | 'in-progress' | 'failed', string> = {
-  completed: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20',
-  'in-progress': 'bg-amber-500/10 text-amber-500 border-amber-500/20',
-  failed: 'bg-red-500/10 text-red-500 border-red-500/20',
+  completed: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20 hover:bg-emerald-500/10',
+  'in-progress': 'bg-amber-500/10 text-amber-500 border-amber-500/20 hover:bg-amber-500/10',
+  failed: 'bg-red-500/10 text-red-500 border-red-500/20 hover:bg-red-500/10',
 }
+
+const stats = computed(() => [
+  { label: 'Snapshots', value: backups.filter((b) => b.status === 'completed').length, icon: Database },
+  { label: 'Total size', value: `${totalSize.value.toFixed(1)} GB`, icon: HardDrive },
+  { label: 'Success', value: `${successRate.value}%`, icon: History },
+  { label: 'Retention', value: '7d / 4w', icon: Clock },
+])
 </script>
 
 <template>
-  <div class="px-4 sm:px-6 lg:px-8 py-6 space-y-6 max-w-7xl mx-auto">
-    <header class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+  <div class="px-4 sm:px-6 lg:px-8 py-6 max-w-3xl mx-auto space-y-6">
+    <motion.header
+      :initial="{ opacity: 0, y: -8 }"
+      :animate="{ opacity: 1, y: 0 }"
+      :transition="{ duration: 0.4 }"
+      class="space-y-3"
+    >
       <div>
         <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Backups</h1>
-        <p class="text-sm text-muted-foreground mt-1">Daily snapshots + on-demand backups for every server.</p>
+        <p class="text-sm text-muted-foreground mt-1">Daily snapshots and on-demand backups.</p>
       </div>
-      <Button class="self-start sm:self-auto" @click="notify('New backup queued', 'Choose a server in production · runs immediately.')">
-        <Database class="h-4 w-4 mr-1.5" /> New backup
+      <Button class="w-full sm:w-auto gap-1.5" @click="notify('New backup queued', 'Pick a server in production · runs immediately.')">
+        <Plus class="h-4 w-4" /> New backup
       </Button>
-    </header>
+    </motion.header>
 
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
-      <motion.div
-        v-for="(card, i) in [
-          { label: 'Snapshots stored', value: backups.filter(b => b.status === 'completed').length, icon: Database },
-          { label: 'Total size', value: `${totalSize.toFixed(1)} GB`, icon: HardDrive },
-          { label: 'Success rate', value: `${successRate}%`, icon: History },
-          { label: 'Retention', value: '7 daily · 4 weekly', icon: Clock },
-        ]"
-        :key="card.label"
-        :initial="{ opacity: 0, y: 8 }"
-        :animate="{ opacity: 1, y: 0 }"
-        :transition="{ duration: 0.35, delay: 0.05 * i }"
-      >
-        <Card>
-          <CardContent class="p-4 flex items-start justify-between">
-            <div>
-              <p class="text-[11px] uppercase tracking-wide text-muted-foreground font-semibold">{{ card.label }}</p>
-              <p class="text-xl sm:text-2xl font-semibold mt-1.5 tabular-nums">{{ card.value }}</p>
+    <motion.div :initial="{ opacity: 0, y: 8 }" :animate="{ opacity: 1, y: 0 }" :transition="{ duration: 0.4, delay: 0.05 }">
+      <div class="grid grid-cols-2 gap-3">
+        <Card v-for="stat in stats" :key="stat.label">
+          <CardContent class="p-4">
+            <div class="flex items-center gap-2 mb-1.5">
+              <component :is="stat.icon" class="h-3.5 w-3.5 text-muted-foreground" />
+              <p class="text-[11px] uppercase tracking-wide text-muted-foreground font-semibold">{{ stat.label }}</p>
             </div>
-            <component :is="card.icon" class="h-5 w-5 text-muted-foreground/70 shrink-0" />
+            <p class="text-lg sm:text-xl font-semibold tabular-nums">{{ stat.value }}</p>
           </CardContent>
         </Card>
-      </motion.div>
-    </div>
+      </div>
+    </motion.div>
 
-    <Card class="overflow-hidden">
-      <div class="overflow-x-auto">
-        <Table class="min-w-[760px]">
-          <TableHeader class="bg-muted/40">
-            <TableRow class="hover:bg-transparent">
-              <TableHead>Server</TableHead>
-              <TableHead>Started</TableHead>
-              <TableHead class="text-right">Duration</TableHead>
-              <TableHead class="text-right">Size</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead class="w-10" />
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow
+    <motion.div :initial="{ opacity: 0, y: 8 }" :animate="{ opacity: 1, y: 0 }" :transition="{ duration: 0.4, delay: 0.1 }">
+      <Card>
+        <CardHeader class="pb-3">
+          <CardTitle class="text-base">All snapshots</CardTitle>
+          <CardDescription class="text-xs">Tap a row to open the server. Use the menu to restore or download.</CardDescription>
+        </CardHeader>
+        <CardContent class="p-0">
+          <ul class="divide-y">
+            <li
               v-for="b in backups"
               :key="b.id"
-              class="cursor-pointer"
+              class="p-4 flex items-start gap-3 hover:bg-muted/40 transition-colors cursor-pointer"
               @click="openServer(b.serverId)"
             >
-              <TableCell>
-                <div class="flex items-center gap-3">
-                  <GameIcon :game="b.game" size="sm" />
-                  <div>
-                    <p class="text-sm font-medium leading-tight">{{ b.serverName }}</p>
-                    <p class="text-[11px] text-muted-foreground font-mono leading-tight mt-0.5">{{ b.id }}</p>
-                  </div>
+              <GameIcon :game="b.game" size="md" />
+              <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between gap-3">
+                  <p class="text-sm font-medium leading-tight">{{ b.serverName }}</p>
+                  <Badge variant="outline" :class="statusBadgeClass[b.status]" class="capitalize text-[10px] shrink-0">
+                    {{ b.status }}
+                  </Badge>
                 </div>
-              </TableCell>
-              <TableCell class="text-muted-foreground text-sm whitespace-nowrap">{{ b.startedAt }}</TableCell>
-              <TableCell class="text-right font-mono tabular-nums">{{ fmtDuration(b.durationSec) }}</TableCell>
-              <TableCell class="text-right font-mono tabular-nums">{{ b.sizeGb.toFixed(1) }} GB</TableCell>
-              <TableCell>
-                <Badge variant="outline" class="capitalize font-normal">{{ b.type }}</Badge>
-              </TableCell>
-              <TableCell>
-                <Badge variant="outline" :class="statusBadgeClass[b.status]" class="capitalize">
-                  {{ b.status }}
-                </Badge>
-              </TableCell>
-              <TableCell @click.stop>
+                <p class="text-[11px] text-muted-foreground mt-1 font-mono tabular-nums">
+                  {{ b.startedAt }}
+                </p>
+                <div class="flex items-center gap-3 mt-2 text-[11px] text-muted-foreground">
+                  <span class="capitalize">{{ b.type }}</span>
+                  <span>·</span>
+                  <span class="tabular-nums">{{ b.sizeGb.toFixed(1) }} GB</span>
+                  <span>·</span>
+                  <span class="tabular-nums">{{ fmtDuration(b.durationSec) }}</span>
+                </div>
+              </div>
+              <div @click.stop>
                 <DropdownMenu>
                   <DropdownMenuTrigger as-child>
-                    <Button variant="ghost" size="icon" class="h-7 w-7 text-muted-foreground">
+                    <Button variant="ghost" size="icon" class="h-7 w-7 shrink-0">
                       <MoreHorizontal class="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
@@ -140,11 +132,11 @@ const statusBadgeClass: Record<'completed' | 'in-progress' | 'failed', string> =
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </div>
-    </Card>
+              </div>
+            </li>
+          </ul>
+        </CardContent>
+      </Card>
+    </motion.div>
   </div>
 </template>

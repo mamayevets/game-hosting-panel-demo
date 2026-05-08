@@ -4,36 +4,41 @@ import { cn } from '@/lib/utils'
 
 const props = defineProps<{ game: Game; size?: 'sm' | 'md' | 'lg' | 'xl' }>()
 
-const emoji: Record<Game, string> = {
-  minecraft: '🟢',
-  ark: '🦖',
-  rust: '🔫',
-  palworld: '🐉',
-  valheim: '⚔️',
-  cs2: '🎯',
+const initial: Record<Game, string> = {
+  minecraft: 'MC',
+  ark: 'AR',
+  rust: 'RS',
+  palworld: 'PW',
+  valheim: 'VH',
+  cs2: 'CS',
 }
 
-const bg: Record<Game, string> = {
-  minecraft: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 ring-emerald-500/20',
-  ark: 'bg-orange-500/10 text-orange-600 dark:text-orange-400 ring-orange-500/20',
-  rust: 'bg-red-500/10 text-red-600 dark:text-red-400 ring-red-500/20',
-  palworld: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 ring-purple-500/20',
-  valheim: 'bg-sky-500/10 text-sky-600 dark:text-sky-400 ring-sky-500/20',
-  cs2: 'bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 ring-yellow-500/20',
+const accent: Record<Game, string> = {
+  minecraft: 'before:bg-emerald-500/70',
+  ark: 'before:bg-orange-500/70',
+  rust: 'before:bg-red-500/70',
+  palworld: 'before:bg-purple-400/70',
+  valheim: 'before:bg-sky-400/70',
+  cs2: 'before:bg-amber-300/70',
 }
 
 const sizeClass = {
-  sm: 'h-7 w-7 text-sm',
-  md: 'h-9 w-9 text-base',
-  lg: 'h-11 w-11 text-lg',
-  xl: 'h-14 w-14 text-2xl',
+  sm: 'h-7 w-7 text-[9px]',
+  md: 'h-9 w-9 text-[10px]',
+  lg: 'h-11 w-11 text-xs',
+  xl: 'h-14 w-14 text-sm',
 }[props.size ?? 'md']
 </script>
 
 <template>
   <div
-    :class="cn('rounded-xl flex items-center justify-center ring-1 ring-inset shrink-0', sizeClass, bg[props.game])"
+    :class="cn(
+      'relative rounded-md flex items-center justify-center shrink-0 font-mono font-semibold tracking-tight bg-muted text-foreground border border-border/60 overflow-hidden',
+      'before:content-[\'\'] before:absolute before:top-0 before:left-0 before:right-0 before:h-[2px]',
+      sizeClass,
+      accent[props.game],
+    )"
   >
-    {{ emoji[props.game] }}
+    {{ initial[props.game] }}
   </div>
 </template>

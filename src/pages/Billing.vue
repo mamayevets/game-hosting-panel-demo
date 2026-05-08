@@ -207,13 +207,12 @@ const usageRows = computed(() => [
               </li>
             </ul>
             <Button
-              class="w-full gap-1.5"
-              size="sm"
+              class="w-full gap-1.5 h-10"
               :variant="plan.popular ? 'default' : 'outline'"
               @click="upgradeToPlan(plan.name)"
             >
               Choose plan
-              <ArrowUpRight class="h-3 w-3" />
+              <ArrowUpRight class="h-4 w-4" />
             </Button>
           </CardContent>
         </Card>

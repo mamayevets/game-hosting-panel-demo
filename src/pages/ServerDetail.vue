@@ -8,7 +8,7 @@ import GameIcon from '@/components/GameIcon.vue'
 import ResourceChart from '@/components/ResourceChart.vue'
 import {
   Play, Square, RotateCw, Save, Activity, Terminal, FolderOpen, Puzzle,
-  ArrowLeft, Folder, FileText, ChevronRight, Copy, Wifi, Search, Send,
+  ArrowLeft, Folder, FileText, ChevronRight, Copy, Wifi, Search, Send, Check,
 } from 'lucide-vue-next'
 import type { ConsoleLine, ServerStatus } from '@/types'
 import { Button } from '@/components/ui/button'
@@ -36,6 +36,19 @@ const isBusy = computed(() => ['restarting', 'stopping', 'starting'].includes(st
 const backupProgress = ref<number | null>(null)
 let backupTimer: number | undefined
 
+type ActionKey = 'restart' | 'stop' | 'start' | 'backup'
+const justFinished = ref<ActionKey | null>(null)
+let finishTimer: number | undefined
+
+function flashFinished(key: ActionKey) {
+  justFinished.value = key
+  if (finishTimer) window.clearTimeout(finishTimer)
+  finishTimer = window.setTimeout(() => {
+    justFinished.value = null
+    finishTimer = undefined
+  }, 1800)
+}
+
 function runAction(target: 'restart' | 'stop' | 'start') {
   if (isBusy.value) return
   if (target === 'restart') {
@@ -44,6 +57,7 @@ function runAction(target: 'restart' | 'stop' | 'start') {
     setTimeout(() => {
       overrideStatus.value = 'online'
       pushLine({ timestamp: ts(), level: 'system', text: 'Server back online (downtime 2.4s)' })
+      flashFinished('restart')
       toast.success('Restart complete', { description: 'Server is online again.' })
     }, 2500)
   } else if (target === 'stop') {
@@ -52,6 +66,7 @@ function runAction(target: 'restart' | 'stop' | 'start') {
     setTimeout(() => {
       overrideStatus.value = 'offline'
       pushLine({ timestamp: ts(), level: 'system', text: 'Server stopped gracefully' })
+      flashFinished('stop')
       toast.success('Server stopped')
     }, 2000)
   } else if (target === 'start') {
@@ -60,6 +75,7 @@ function runAction(target: 'restart' | 'stop' | 'start') {
     setTimeout(() => {
       overrideStatus.value = 'online'
       pushLine({ timestamp: ts(), level: 'system', text: 'Listening on 0.0.0.0:25565' })
+      flashFinished('start')
       toast.success('Server started')
     }, 3000)
   }
@@ -81,6 +97,7 @@ function runBackup() {
       setTimeout(() => {
         backupProgress.value = null
         pushLine({ timestamp: ts(), level: 'info', text: 'Backup completed · 4.2 GB compressed' })
+        flashFinished('backup')
         toast.success('Backup completed', { description: '4.2 GB · stored in current region.' })
       }, 400)
     }
@@ -277,21 +294,54 @@ const livePlayersOnline = computed(() => {
               </div>
             </div>
             <div class="grid grid-cols-3 sm:flex gap-2 shrink-0">
-              <Button variant="outline" size="sm" class="gap-1.5" :disabled="isBusy" @click="runAction('restart')">
-                <RotateCw class="h-4 w-4" :class="{ 'animate-spin': status === 'restarting' }" />
-                <span class="hidden sm:inline">{{ status === 'restarting' ? 'Restarting…' : 'Restart' }}</span>
+              <Button
+                variant="outline"
+                size="sm"
+                class="gap-1.5 transition-colors"
+                :class="justFinished === 'restart' ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-500 hover:bg-emerald-500/10 hover:text-emerald-500' : ''"
+                :disabled="isBusy"
+                @click="runAction('restart')"
+              >
+                <Check v-if="justFinished === 'restart'" class="h-4 w-4" />
+                <RotateCw v-else class="h-4 w-4" :class="{ 'animate-spin': status === 'restarting' }" />
+                <span class="hidden sm:inline">{{ justFinished === 'restart' ? 'Done' : status === 'restarting' ? 'Restarting…' : 'Restart' }}</span>
               </Button>
-              <Button v-if="status === 'online' || status === 'stopping'" variant="destructive" size="sm" class="gap-1.5" :disabled="isBusy" @click="runAction('stop')">
-                <Square class="h-4 w-4" />
-                <span class="hidden sm:inline">{{ status === 'stopping' ? 'Stopping…' : 'Stop' }}</span>
+              <Button
+                v-if="status === 'online' || status === 'stopping' || justFinished === 'start'"
+                variant="destructive"
+                size="sm"
+                class="gap-1.5 transition-colors"
+                :disabled="isBusy"
+                @click="runAction('stop')"
+              >
+                <Check v-if="justFinished === 'start'" class="h-4 w-4" />
+                <Square v-else class="h-4 w-4" />
+                <span class="hidden sm:inline">{{ justFinished === 'start' ? 'Started' : status === 'stopping' ? 'Stopping…' : 'Stop' }}</span>
               </Button>
-              <Button v-else size="sm" class="gap-1.5" :disabled="isBusy" @click="runAction('start')">
-                <Play class="h-4 w-4" />
-                <span class="hidden sm:inline">{{ status === 'starting' ? 'Starting…' : 'Start' }}</span>
+              <Button
+                v-else
+                size="sm"
+                class="gap-1.5 transition-colors"
+                :class="justFinished === 'stop' ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-500 hover:bg-emerald-500/10 hover:text-emerald-500' : ''"
+                variant="outline"
+                :disabled="isBusy"
+                @click="runAction('start')"
+              >
+                <Check v-if="justFinished === 'stop'" class="h-4 w-4" />
+                <Play v-else class="h-4 w-4" />
+                <span class="hidden sm:inline">{{ justFinished === 'stop' ? 'Stopped' : status === 'starting' ? 'Starting…' : 'Start' }}</span>
               </Button>
-              <Button variant="outline" size="sm" class="gap-1.5" :disabled="backupProgress !== null" @click="runBackup">
-                <Save class="h-4 w-4" />
-                <span class="hidden sm:inline">{{ backupProgress !== null ? `${backupProgress}%` : 'Backup' }}</span>
+              <Button
+                variant="outline"
+                size="sm"
+                class="gap-1.5 transition-colors"
+                :class="justFinished === 'backup' ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-500 hover:bg-emerald-500/10 hover:text-emerald-500' : ''"
+                :disabled="backupProgress !== null"
+                @click="runBackup"
+              >
+                <Check v-if="justFinished === 'backup'" class="h-4 w-4" />
+                <Save v-else class="h-4 w-4" />
+                <span class="hidden sm:inline">{{ justFinished === 'backup' ? 'Saved' : backupProgress !== null ? `${backupProgress}%` : 'Backup' }}</span>
               </Button>
             </div>
           </div>
