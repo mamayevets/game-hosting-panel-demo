@@ -81,15 +81,16 @@ function notify(label: string, description?: string) {
                 Renews <span class="font-medium text-foreground">{{ nextCharge.date }}</span> · Visa · 4242
               </p>
             </div>
-            <div class="flex items-stretch gap-2 w-full sm:w-auto sm:shrink-0">
-              <Button variant="outline" size="sm" class="flex-1 sm:flex-initial gap-1.5 min-w-0 overflow-hidden" @click="notify('Update payment', 'Routes to Stripe customer portal.')">
-                <CreditCard class="h-3.5 w-3.5 shrink-0" />
-                <span class="truncate">Update card</span>
+            <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto sm:shrink-0">
+              <Button variant="outline" size="sm" class="w-full sm:w-auto gap-1.5" @click="notify('Update payment', 'Routes to Stripe customer portal.')">
+                <CreditCard class="h-3.5 w-3.5" />
+                <span>Update card</span>
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger as-child>
-                  <Button variant="outline" size="icon" class="h-9 w-9 shrink-0" aria-label="More billing actions">
-                    <MoreHorizontal class="h-4 w-4" />
+                  <Button variant="outline" size="sm" class="w-full sm:w-auto gap-1.5">
+                    <span>Manage</span>
+                    <MoreHorizontal class="h-3.5 w-3.5" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" class="w-56">
