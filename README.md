@@ -4,7 +4,9 @@
 
 ## Live demo
 
-After deploying to Cloudflare Pages: **https://game-hosting-panel-demo.pages.dev**
+🌎 **[game-hosting-panel-demo.pages.dev](https://game-hosting-panel-demo.pages.dev)**
+
+Hosted on Cloudflare Pages. Login with any email + password (it's a mock).
 
 ## Stack
 
