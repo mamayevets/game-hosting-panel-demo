@@ -143,7 +143,7 @@ const playersLatest = computed(() => playerHistory.value[playerHistory.value.len
 </script>
 
 <template>
-  <div v-if="server" class="p-8 max-w-7xl mx-auto">
+  <div v-if="server" class="px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto">
     <Button variant="ghost" size="sm" class="mb-4 -ml-3 gap-1.5 text-muted-foreground hover:text-foreground" @click="router.push({ name: 'servers' })">
       <ArrowLeft class="h-4 w-4" /> All servers
     </Button>
@@ -154,17 +154,17 @@ const playersLatest = computed(() => playerHistory.value[playerHistory.value.len
       :transition="{ duration: 0.4 }"
     >
       <Card class="mb-6 border-border/60">
-        <CardContent class="p-6">
-          <div class="flex items-start justify-between gap-4 flex-wrap">
-            <div class="flex items-start gap-4">
-              <GameIcon :game="server.game" size="xl" />
-              <div>
-                <div class="flex items-center gap-3">
-                  <h1 class="text-xl font-bold tracking-tight">{{ server.name }}</h1>
+        <CardContent class="p-4 sm:p-6">
+          <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div class="flex items-start gap-3 sm:gap-4 min-w-0">
+              <GameIcon :game="server.game" :size="'xl'" />
+              <div class="min-w-0">
+                <div class="flex items-center flex-wrap gap-2 sm:gap-3">
+                  <h1 class="text-lg sm:text-xl font-bold tracking-tight">{{ server.name }}</h1>
                   <StatusBadge :status="server.status" />
                 </div>
-                <div class="flex items-center gap-3 mt-1.5 text-sm text-muted-foreground">
-                  <span class="font-mono">{{ server.ipAddress }}:{{ server.port }}</span>
+                <div class="flex items-center flex-wrap gap-x-2 gap-y-1 mt-1.5 text-xs sm:text-sm text-muted-foreground">
+                  <span class="font-mono break-all">{{ server.ipAddress }}:{{ server.port }}</span>
                   <Tooltip>
                     <TooltipTrigger as-child>
                       <button class="hover:text-foreground transition-colors" @click="copyAddress">
@@ -180,18 +180,18 @@ const playersLatest = computed(() => playerHistory.value[playerHistory.value.len
                 </div>
               </div>
             </div>
-            <div class="flex gap-2 flex-wrap">
+            <div class="grid grid-cols-3 sm:flex gap-2 sm:flex-wrap shrink-0">
               <Button variant="outline" size="sm" class="gap-1.5" @click="handleAction('Restart issued')">
-                <RotateCw class="h-4 w-4" /> Restart
+                <RotateCw class="h-4 w-4" /> <span class="hidden sm:inline">Restart</span>
               </Button>
               <Button v-if="server.status === 'online'" variant="destructive" size="sm" class="gap-1.5" @click="handleAction('Stop issued')">
-                <Square class="h-4 w-4" /> Stop
+                <Square class="h-4 w-4" /> <span class="hidden sm:inline">Stop</span>
               </Button>
               <Button v-else size="sm" class="gap-1.5" @click="handleAction('Start issued')">
-                <Play class="h-4 w-4" /> Start
+                <Play class="h-4 w-4" /> <span class="hidden sm:inline">Start</span>
               </Button>
               <Button variant="outline" size="sm" class="gap-1.5" @click="handleAction('Backup queued')">
-                <Save class="h-4 w-4" /> Backup
+                <Save class="h-4 w-4" /> <span class="hidden sm:inline">Backup</span>
               </Button>
             </div>
           </div>
@@ -200,20 +200,22 @@ const playersLatest = computed(() => playerHistory.value[playerHistory.value.len
     </motion.div>
 
     <Tabs v-model="activeTab" class="space-y-6">
-      <TabsList class="grid grid-cols-4 w-full max-w-2xl">
-        <TabsTrigger value="overview" class="gap-1.5">
-          <Activity class="h-3.5 w-3.5" /> Overview
-        </TabsTrigger>
-        <TabsTrigger value="console" class="gap-1.5">
-          <Terminal class="h-3.5 w-3.5" /> Console
-        </TabsTrigger>
-        <TabsTrigger value="files" class="gap-1.5">
-          <FolderOpen class="h-3.5 w-3.5" /> Files
-        </TabsTrigger>
-        <TabsTrigger value="plugins" class="gap-1.5">
-          <Puzzle class="h-3.5 w-3.5" /> Plugins
-        </TabsTrigger>
-      </TabsList>
+      <div class="overflow-x-auto -mx-1 px-1">
+        <TabsList class="w-max sm:w-full sm:max-w-2xl sm:grid sm:grid-cols-4">
+          <TabsTrigger value="overview" class="gap-1.5">
+            <Activity class="h-3.5 w-3.5" /> Overview
+          </TabsTrigger>
+          <TabsTrigger value="console" class="gap-1.5">
+            <Terminal class="h-3.5 w-3.5" /> Console
+          </TabsTrigger>
+          <TabsTrigger value="files" class="gap-1.5">
+            <FolderOpen class="h-3.5 w-3.5" /> Files
+          </TabsTrigger>
+          <TabsTrigger value="plugins" class="gap-1.5">
+            <Puzzle class="h-3.5 w-3.5" /> Plugins
+          </TabsTrigger>
+        </TabsList>
+      </div>
 
       <TabsContent value="overview" class="space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">

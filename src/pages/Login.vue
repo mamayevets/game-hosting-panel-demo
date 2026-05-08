@@ -50,7 +50,7 @@ async function handleSubmit() {
           <Sparkles class="h-5 w-5 text-background" />
         </motion.div>
         <h1 class="mt-5 text-xl font-semibold tracking-tight">Welcome back</h1>
-        <p class="text-sm text-muted-foreground mt-1.5">Sign in to your Godlike hosting panel</p>
+        <p class="text-sm text-muted-foreground mt-1.5">Sign in to the hosting panel demo</p>
       </div>
 
       <Card>
@@ -77,7 +77,7 @@ async function handleSubmit() {
       </Card>
 
       <p class="text-center text-xs text-muted-foreground mt-6">
-        Concept demo · UI for the Godlike full-stack interview
+        Concept UI demo · Vue 3 + shadcn-vue + motion-v
       </p>
     </motion.div>
   </div>

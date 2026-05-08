@@ -14,9 +14,9 @@ import { toast } from 'vue-sonner'
 const auth = useAuthStore()
 
 const profile = ref({
-  fullName: 'Mamay',
-  email: auth.email ?? 'demo@godlike.host',
-  company: 'Mamay Studios',
+  fullName: '',
+  email: auth.email ?? 'demo@test.host',
+  company: '',
   timezone: 'Europe/Kyiv',
 })
 
@@ -52,13 +52,13 @@ function saveProfile() {
 </script>
 
 <template>
-  <div class="p-8 max-w-4xl mx-auto space-y-6">
+  <div class="px-4 sm:px-6 lg:px-8 py-6 max-w-4xl mx-auto space-y-6">
     <motion.header
       :initial="{ opacity: 0, y: -8 }"
       :animate="{ opacity: 1, y: 0 }"
       :transition="{ duration: 0.4 }"
     >
-      <h1 class="text-2xl font-bold tracking-tight">Account</h1>
+      <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Account</h1>
       <p class="text-sm text-muted-foreground mt-1">Manage your profile, security, and notifications</p>
     </motion.header>
 

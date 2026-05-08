@@ -8,7 +8,7 @@ import GameIcon from '@/components/GameIcon.vue'
 import PlayersAreaChart from '@/components/PlayersAreaChart.vue'
 import type { ServerStatus } from '@/types'
 import {
-  Plus, TrendingUp, TrendingDown, Github, MoreHorizontal, GripVertical,
+  Plus, TrendingUp, TrendingDown, MoreHorizontal, GripVertical,
   Search, Settings2, ArrowUpRight,
 } from 'lucide-vue-next'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
@@ -109,19 +109,7 @@ const stats = computed(() => [
 
 <template>
   <div class="flex flex-col">
-    <header class="flex items-center justify-between border-b px-6 lg:px-8 h-14 sticky top-0 bg-background/80 backdrop-blur z-10">
-      <h1 class="text-base font-semibold tracking-tight">Dashboard</h1>
-      <a
-        href="https://github.com/mamayevets/game-hosting-panel-demo"
-        target="_blank"
-        rel="noreferrer"
-        class="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
-      >
-        <Github class="h-4 w-4" /> GitHub
-      </a>
-    </header>
-
-    <div class="px-6 lg:px-8 py-6 space-y-6 max-w-[1400px] w-full mx-auto">
+    <div class="px-4 sm:px-6 lg:px-8 py-6 space-y-6 max-w-[1400px] w-full mx-auto">
       <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         <motion.div
           v-for="(s, i) in stats"
@@ -163,7 +151,7 @@ const stats = computed(() => [
         :transition="{ duration: 0.4, delay: 0.2, ease: 'easeOut' }"
       >
         <Card>
-          <CardHeader class="flex flex-row items-start justify-between gap-4 space-y-0 border-b pb-5">
+          <CardHeader class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 space-y-0 border-b pb-5">
             <div class="space-y-1">
               <CardTitle class="text-base">Total active players</CardTitle>
               <CardDescription>
@@ -171,10 +159,10 @@ const stats = computed(() => [
                 <span class="capitalize">last {{ range === '7d' ? '7 days' : range === '30d' ? '30 days' : '3 months' }}</span>
               </CardDescription>
             </div>
-            <ToggleGroup v-model="range" type="single" variant="outline" size="sm" class="hidden md:flex">
-              <ToggleGroupItem value="90d" class="text-xs px-3">Last 3 months</ToggleGroupItem>
-              <ToggleGroupItem value="30d" class="text-xs px-3">Last 30 days</ToggleGroupItem>
-              <ToggleGroupItem value="7d" class="text-xs px-3">Last 7 days</ToggleGroupItem>
+            <ToggleGroup v-model="range" type="single" variant="outline" size="sm" class="shrink-0">
+              <ToggleGroupItem value="90d" class="text-xs px-2 sm:px-3">3 mo</ToggleGroupItem>
+              <ToggleGroupItem value="30d" class="text-xs px-2 sm:px-3">30 d</ToggleGroupItem>
+              <ToggleGroupItem value="7d" class="text-xs px-2 sm:px-3">7 d</ToggleGroupItem>
             </ToggleGroup>
           </CardHeader>
           <CardContent class="px-2 sm:px-4 pt-6">
@@ -189,46 +177,48 @@ const stats = computed(() => [
         :transition="{ duration: 0.4, delay: 0.35, ease: 'easeOut' }"
       >
         <Tabs v-model="tab" class="space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <TabsList>
-              <TabsTrigger value="all" class="gap-1.5">
-                All
-              </TabsTrigger>
-              <TabsTrigger value="online" class="gap-1.5">
-                Online
-                <Badge variant="secondary" class="px-1 py-0 text-[10px] font-mono">{{ counts.online }}</Badge>
-              </TabsTrigger>
-              <TabsTrigger value="offline" class="gap-1.5">
-                Offline
-                <Badge variant="secondary" class="px-1 py-0 text-[10px] font-mono">{{ counts.offline }}</Badge>
-              </TabsTrigger>
-              <TabsTrigger value="starting" class="gap-1.5">
-                Starting
-                <Badge variant="secondary" class="px-1 py-0 text-[10px] font-mono">{{ counts.starting }}</Badge>
-              </TabsTrigger>
-            </TabsList>
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div class="overflow-x-auto -mx-1 px-1 sm:overflow-visible">
+              <TabsList class="w-max">
+                <TabsTrigger value="all" class="gap-1.5">All</TabsTrigger>
+                <TabsTrigger value="online" class="gap-1.5">
+                  Online
+                  <Badge variant="secondary" class="px-1 py-0 text-[10px] font-mono">{{ counts.online }}</Badge>
+                </TabsTrigger>
+                <TabsTrigger value="offline" class="gap-1.5">
+                  Offline
+                  <Badge variant="secondary" class="px-1 py-0 text-[10px] font-mono">{{ counts.offline }}</Badge>
+                </TabsTrigger>
+                <TabsTrigger value="starting" class="gap-1.5">
+                  Starting
+                  <Badge variant="secondary" class="px-1 py-0 text-[10px] font-mono">{{ counts.starting }}</Badge>
+                </TabsTrigger>
+              </TabsList>
+            </div>
             <div class="flex items-center gap-2">
-              <div class="relative">
+              <div class="relative flex-1 sm:flex-none">
                 <Search class="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
                 <Input
                   v-model="search"
                   placeholder="Search servers…"
-                  class="pl-8 h-8 w-[180px] lg:w-[220px]"
+                  class="pl-8 h-8 w-full sm:w-[180px] lg:w-[220px]"
                 />
               </div>
-              <Button variant="outline" size="sm" class="gap-1.5" @click="notify('Customize columns', 'Choose visible fields and persist per-user.')">
+              <Button variant="outline" size="sm" class="gap-1.5 hidden sm:inline-flex" @click="notify('Customize columns', 'Choose visible fields and persist per-user.')">
                 <Settings2 class="h-3.5 w-3.5" />
-                <span class="hidden sm:inline">Customize columns</span>
+                <span class="hidden md:inline">Customize</span>
               </Button>
-              <Button size="sm" class="gap-1.5" @click="notify('New server', 'Hooks into provisioning API in production.')">
-                <Plus class="h-3.5 w-3.5" /> New server
+              <Button size="sm" class="gap-1.5 shrink-0" @click="notify('New server', 'Hooks into provisioning API in production.')">
+                <Plus class="h-3.5 w-3.5" />
+                <span class="hidden sm:inline">New server</span>
               </Button>
             </div>
           </div>
 
           <TabsContent :value="tab" force-mount>
             <Card class="overflow-hidden">
-              <Table>
+              <div class="overflow-x-auto">
+              <Table class="min-w-[860px]">
                 <TableHeader class="bg-muted/40">
                   <TableRow class="hover:bg-transparent">
                     <TableHead class="w-10">
@@ -309,6 +299,7 @@ const stats = computed(() => [
                   </TableRow>
                 </TableBody>
               </Table>
+              </div>
               <div class="flex items-center justify-between px-4 py-3 border-t text-xs text-muted-foreground">
                 <span>{{ selectedIds.size }} of {{ filtered.length }} row(s) selected</span>
                 <div class="flex items-center gap-2">

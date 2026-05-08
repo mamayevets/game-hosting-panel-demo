@@ -28,14 +28,14 @@ function upgradeToPlan(name: string) {
 </script>
 
 <template>
-  <div class="p-8 max-w-7xl mx-auto">
+  <div class="px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto">
     <motion.header
       :initial="{ opacity: 0, y: -8 }"
       :animate="{ opacity: 1, y: 0 }"
       :transition="{ duration: 0.4 }"
-      class="mb-8"
+      class="mb-6 sm:mb-8"
     >
-      <h1 class="text-2xl font-bold tracking-tight">Billing</h1>
+      <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Billing</h1>
       <p class="text-sm text-muted-foreground mt-1">Manage subscriptions, invoices, and payment methods</p>
     </motion.header>
 
@@ -89,7 +89,8 @@ function upgradeToPlan(name: string) {
         <CardTitle class="text-base">Invoice history</CardTitle>
       </CardHeader>
       <CardContent class="p-0">
-        <Table>
+        <div class="overflow-x-auto">
+        <Table class="min-w-[640px]">
           <TableHeader>
             <TableRow>
               <TableHead>Number</TableHead>
@@ -125,6 +126,7 @@ function upgradeToPlan(name: string) {
             </TableRow>
           </TableBody>
         </Table>
+        </div>
       </CardContent>
     </Card>
 
