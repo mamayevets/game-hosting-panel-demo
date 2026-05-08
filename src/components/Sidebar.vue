@@ -1,21 +1,21 @@
 <script setup lang="ts">
 import { useAuthStore } from '@/stores/auth'
-import { useThemeStore } from '@/stores/theme'
 import { useRouter } from 'vue-router'
 import {
-  Server, CreditCard, UserCircle, LogOut, Sun, Moon,
-  Plus, Mail, Settings, HelpCircle, Search, ChevronUp,
-  Activity, Database, FileText, Sparkles,
+  Server, CreditCard, UserCircle, LogOut,
+  Plus, Mail, Settings, HelpCircle, Search,
+  Activity, Database, FileText, Sparkles, ChevronUp,
 } from 'lucide-vue-next'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { computed } from 'vue'
-import { toast } from 'vue-sonner'
+
+const props = defineProps<{ inSheet?: boolean }>()
+const emit = defineEmits<{ quickCreate: []; openSearch: []; navigate: [] }>()
 
 const auth = useAuthStore()
-const theme = useThemeStore()
 const router = useRouter()
 
 const initials = computed(() => {
@@ -28,14 +28,6 @@ function handleLogout() {
   router.push({ name: 'login' })
 }
 
-function quickCreate() {
-  toast.message('Quick create', { description: 'Opens a multi-step provisioning wizard in production.' })
-}
-
-function comingSoon(label: string) {
-  toast.message(label, { description: 'Coming soon.' })
-}
-
 const primaryNav = [
   { name: 'servers', label: 'Servers', icon: Server },
   { name: 'billing', label: 'Billing', icon: CreditCard },
@@ -43,36 +35,38 @@ const primaryNav = [
 ] as const
 
 const resourceNav = [
-  { label: 'Activity log', icon: Activity },
-  { label: 'Backups', icon: Database },
-  { label: 'API reference', icon: FileText },
+  { name: 'activity', label: 'Activity log', icon: Activity },
+  { name: 'backups', label: 'Backups', icon: Database },
+  { name: 'api-reference', label: 'API reference', icon: FileText },
 ] as const
 
 const bottomNav = [
-  { label: 'Settings', icon: Settings },
-  { label: 'Get help', icon: HelpCircle },
-  { label: 'Search', icon: Search, hint: '⌘K' },
+  { name: 'settings', label: 'Settings', icon: Settings },
+  { name: 'help', label: 'Help & support', icon: HelpCircle },
 ] as const
 </script>
 
 <template>
-  <aside class="w-[260px] shrink-0 border-r bg-sidebar text-sidebar-foreground flex flex-col">
+  <div
+    class="h-full w-full flex flex-col bg-sidebar text-sidebar-foreground"
+    :class="!props.inSheet ? 'border-r' : ''"
+  >
     <div class="px-4 py-3 flex items-center gap-2.5">
       <div class="h-7 w-7 rounded-md bg-foreground flex items-center justify-center shrink-0">
         <Sparkles class="h-3.5 w-3.5 text-background" />
       </div>
       <div class="flex-1 min-w-0">
-        <p class="text-sm font-semibold leading-none truncate">Godlike</p>
-        <p class="text-[10px] text-muted-foreground mt-1 uppercase tracking-wider">Hosting Panel</p>
+        <p class="text-sm font-semibold leading-none truncate">Test Panel</p>
+        <p class="text-[10px] text-muted-foreground mt-1 uppercase tracking-wider">Hosting Demo</p>
       </div>
     </div>
 
     <div class="px-3 pt-1 pb-3 flex items-center gap-1">
-      <Button class="flex-1 justify-start gap-2 h-8" size="sm" @click="quickCreate">
+      <Button class="flex-1 justify-start gap-2 h-8" size="sm" @click="emit('quickCreate'); emit('navigate')">
         <Plus class="h-3.5 w-3.5" />
         <span class="text-xs font-semibold">Quick Create</span>
       </Button>
-      <Button variant="outline" size="icon" class="h-8 w-8 shrink-0" @click="comingSoon('Inbox')">
+      <Button variant="outline" size="icon" class="h-8 w-8 shrink-0" aria-label="Inbox" @click="emit('navigate')">
         <Mail class="h-3.5 w-3.5" />
       </Button>
     </div>
@@ -94,7 +88,7 @@ const bottomNav = [
             :class="isActive
               ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium'
               : 'text-muted-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground'"
-            @click="navigate"
+            @click="(e: MouseEvent) => { navigate(e); emit('navigate') }"
           >
             <component :is="item.icon" class="h-4 w-4" />
             {{ item.label }}
@@ -104,40 +98,59 @@ const bottomNav = [
 
       <div class="space-y-0.5">
         <p class="px-2 py-1.5 text-[10px] uppercase tracking-wider text-muted-foreground/70 font-medium">Resources</p>
-        <button
+        <RouterLink
           v-for="item in resourceNav"
-          :key="item.label"
-          class="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-md text-sm text-muted-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground transition-colors"
-          @click="comingSoon(item.label)"
+          :key="item.name"
+          v-slot="{ isActive, navigate, href }"
+          :to="{ name: item.name }"
+          custom
         >
-          <component :is="item.icon" class="h-4 w-4" />
-          {{ item.label }}
-        </button>
+          <a
+            :href="href"
+            class="flex items-center gap-2.5 px-2 py-1.5 rounded-md text-sm transition-colors"
+            :class="isActive
+              ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium'
+              : 'text-muted-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground'"
+            @click="(e: MouseEvent) => { navigate(e); emit('navigate') }"
+          >
+            <component :is="item.icon" class="h-4 w-4" />
+            {{ item.label }}
+          </a>
+        </RouterLink>
       </div>
     </nav>
 
     <Separator />
 
     <div class="p-2 space-y-0.5">
-      <button
+      <RouterLink
         v-for="item in bottomNav"
-        :key="item.label"
-        class="w-full flex items-center justify-between px-2 py-1.5 rounded-md text-sm text-muted-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground transition-colors"
-        @click="comingSoon(item.label)"
+        :key="item.name"
+        v-slot="{ isActive, navigate, href }"
+        :to="{ name: item.name }"
+        custom
       >
-        <span class="flex items-center gap-2.5">
+        <a
+          :href="href"
+          class="flex items-center gap-2.5 px-2 py-1.5 rounded-md text-sm transition-colors"
+          :class="isActive
+            ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium'
+            : 'text-muted-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground'"
+          @click="(e: MouseEvent) => { navigate(e); emit('navigate') }"
+        >
           <component :is="item.icon" class="h-4 w-4" />
           {{ item.label }}
-        </span>
-        <kbd v-if="'hint' in item" class="text-[10px] px-1.5 py-0.5 rounded bg-muted font-sans text-muted-foreground/70">{{ item.hint }}</kbd>
-      </button>
+        </a>
+      </RouterLink>
       <button
-        class="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-md text-sm text-muted-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground transition-colors"
-        @click="theme.toggle"
+        class="w-full flex items-center justify-between px-2 py-1.5 rounded-md text-sm text-muted-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground transition-colors"
+        @click="emit('openSearch'); emit('navigate')"
       >
-        <Sun v-if="theme.mode === 'dark'" class="h-4 w-4" />
-        <Moon v-else class="h-4 w-4" />
-        {{ theme.mode === 'dark' ? 'Light mode' : 'Dark mode' }}
+        <span class="flex items-center gap-2.5">
+          <Search class="h-4 w-4" />
+          Search
+        </span>
+        <kbd class="text-[10px] px-1.5 py-0.5 rounded bg-muted font-sans text-muted-foreground/70">⌘K</kbd>
       </button>
     </div>
 
@@ -159,11 +172,11 @@ const bottomNav = [
       <DropdownMenuContent side="top" align="end" class="w-56">
         <DropdownMenuLabel>{{ auth.email }}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem @click="router.push({ name: 'account' })">
+        <DropdownMenuItem @click="router.push({ name: 'account' }); emit('navigate')">
           <UserCircle class="h-4 w-4 mr-2" />
           Account settings
         </DropdownMenuItem>
-        <DropdownMenuItem @click="router.push({ name: 'billing' })">
+        <DropdownMenuItem @click="router.push({ name: 'billing' }); emit('navigate')">
           <CreditCard class="h-4 w-4 mr-2" />
           Billing
         </DropdownMenuItem>
@@ -174,5 +187,5 @@ const bottomNav = [
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  </aside>
+  </div>
 </template>
