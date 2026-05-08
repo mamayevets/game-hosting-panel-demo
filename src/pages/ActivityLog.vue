@@ -49,7 +49,7 @@ function openServer(serverId?: string) {
 </script>
 
 <template>
-  <div class="px-4 sm:px-6 lg:px-8 py-6 space-y-6 max-w-5xl mx-auto">
+  <div class="px-4 sm:px-6 lg:px-8 py-6 space-y-6 w-full">
     <header>
       <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Activity log</h1>
       <p class="text-sm text-muted-foreground mt-1">Audit trail of every action across servers, backups, billing, and access.</p>

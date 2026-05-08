@@ -25,7 +25,7 @@ function dangerous() {
 </script>
 
 <template>
-  <div class="px-4 sm:px-6 lg:px-8 py-6 space-y-6 max-w-3xl mx-auto">
+  <div class="px-4 sm:px-6 lg:px-8 py-6 space-y-6 w-full">
     <header>
       <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Settings</h1>
       <p class="text-sm text-muted-foreground mt-1">Workspace-level preferences. Personal settings live under Account.</p>

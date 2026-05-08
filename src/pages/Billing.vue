@@ -47,7 +47,7 @@ const usageRows = computed(() => [
 </script>
 
 <template>
-  <div class="px-4 sm:px-6 lg:px-8 py-6 max-w-6xl mx-auto space-y-6">
+  <div class="px-4 sm:px-6 lg:px-8 py-6 w-full space-y-6">
     <motion.header
       :initial="{ opacity: 0, y: -8 }"
       :animate="{ opacity: 1, y: 0 }"

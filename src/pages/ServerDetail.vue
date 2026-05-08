@@ -236,7 +236,7 @@ const livePlayersOnline = computed(() => {
 </script>
 
 <template>
-  <div v-if="server" class="px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto">
+  <div v-if="server" class="px-4 sm:px-6 lg:px-8 py-6 w-full">
     <transition name="banner">
       <div
         v-if="backupProgress !== null"
@@ -351,7 +351,7 @@ const livePlayersOnline = computed(() => {
     </motion.div>
 
     <Tabs v-model="activeTab" class="space-y-6">
-      <TabsList class="grid grid-cols-4 w-full sm:max-w-xl h-9">
+      <TabsList class="grid grid-cols-4 w-full h-9">
         <TabsTrigger value="overview" class="gap-1.5 text-xs sm:text-sm">
           <Activity class="h-3.5 w-3.5" /> Overview
         </TabsTrigger>
