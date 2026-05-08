@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import Sidebar from '@/components/Sidebar.vue'
 import QuickCreateDialog from '@/components/QuickCreateDialog.vue'
@@ -19,27 +19,27 @@ useThemeStore()
 const mobileNavOpen = ref(false)
 const quickCreateOpen = ref(false)
 const commandOpen = ref(false)
+const contentRef = ref<HTMLElement | null>(null)
 
 watch(() => route.fullPath, () => {
   mobileNavOpen.value = false
+  nextTick(() => {
+    contentRef.value?.scrollTo({ top: 0, behavior: 'instant' })
+  })
 })
-
-import { useI18n } from 'vue-i18n'
-
-const { t } = useI18n()
 
 const pageTitle = computed(() => {
   const map: Record<string, string> = {
-    servers: t('dashboard.title'),
-    'server-detail': t('sidebar.nav.servers'),
-    billing: t('sidebar.nav.billing'),
-    subscription: t('sidebar.nav.subscription'),
-    account: t('sidebar.nav.account'),
-    activity: t('sidebar.nav.activity'),
-    backups: t('sidebar.nav.backups'),
-    'api-reference': t('sidebar.nav.apiReference'),
-    settings: t('sidebar.nav.settings'),
-    help: t('sidebar.nav.help'),
+    servers: 'Dashboard',
+    'server-detail': 'Server',
+    billing: 'Billing',
+    subscription: 'Subscription',
+    account: 'Account',
+    activity: 'Activity log',
+    backups: 'Backups',
+    'api-reference': 'API reference',
+    settings: 'Settings',
+    help: 'Help & support',
   }
   return map[route.name as string] ?? 'Test Panel'
 })
@@ -112,7 +112,7 @@ const pageTitle = computed(() => {
           </div>
         </header>
 
-        <div class="flex-1 overflow-y-auto overflow-x-hidden">
+        <div ref="contentRef" class="flex-1 overflow-y-auto overflow-x-hidden">
           <RouterView v-slot="{ Component, route: r }">
             <transition name="page" mode="out-in">
               <component
