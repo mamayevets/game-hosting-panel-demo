@@ -9,10 +9,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import type { Game, Region } from '@/types'
 import { Loader2, Sparkles } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
+import { useServersStore } from '@/stores/servers'
 
 const open = defineModel<boolean>('open', { default: false })
 
 const router = useRouter()
+const servers = useServersStore()
 const submitting = ref(false)
 const name = ref('')
 const game = ref<Game>('minecraft')
@@ -39,14 +41,20 @@ const regions: { value: Region; label: string }[] = [
 async function submit() {
   if (!name.value.trim()) return
   submitting.value = true
-  await new Promise((r) => setTimeout(r, 700))
+  await new Promise((r) => setTimeout(r, 600))
+  const created = servers.addServer({
+    name: name.value,
+    game: game.value,
+    plan: plan.value,
+    region: region.value,
+  })
   submitting.value = false
   open.value = false
-  toast.success('Server queued for provisioning', {
-    description: `${name.value} · ${plan.value} · ${region.value.replace('-', ' ')}`,
+  toast.success('Server provisioning…', {
+    description: `${created.name} · ${created.plan} · ${created.region.replace('-', ' ')}`,
     action: {
-      label: 'View servers',
-      onClick: () => router.push({ name: 'servers' }),
+      label: 'Open',
+      onClick: () => router.push({ name: 'server-detail', params: { id: created.id } }),
     },
   })
   name.value = ''

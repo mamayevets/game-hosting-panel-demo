@@ -109,7 +109,11 @@ const pageTitle = computed(() => {
 
         <RouterView v-slot="{ Component, route: r }">
           <transition name="page" mode="out-in">
-            <component :is="Component" :key="r.fullPath" />
+            <component
+              :is="Component"
+              :key="r.fullPath"
+              @quick-create="quickCreateOpen = true"
+            />
           </transition>
         </RouterView>
       </main>

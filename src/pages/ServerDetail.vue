@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { servers } from '@/data/servers'
+import { useServersStore } from '@/stores/servers'
 import { initialConsole, players, plugins as pluginCatalog, fileTree } from '@/data/console'
 import StatusBadge from '@/components/StatusBadge.vue'
 import GameIcon from '@/components/GameIcon.vue'
@@ -25,7 +25,8 @@ import { toast } from 'vue-sonner'
 
 const route = useRoute()
 const router = useRouter()
-const server = computed(() => servers.find((s) => s.id === route.params.id))
+const serversStore = useServersStore()
+const server = computed(() => serversStore.list.find((s) => s.id === route.params.id))
 
 const activeTab = ref<'overview' | 'console' | 'files' | 'plugins'>('overview')
 

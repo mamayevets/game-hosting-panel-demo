@@ -47,7 +47,7 @@ const usageRows = computed(() => [
 </script>
 
 <template>
-  <div class="px-4 sm:px-6 lg:px-8 py-6 max-w-3xl mx-auto space-y-6">
+  <div class="px-4 sm:px-6 lg:px-8 py-6 max-w-6xl mx-auto space-y-6">
     <motion.header
       :initial="{ opacity: 0, y: -8 }"
       :animate="{ opacity: 1, y: 0 }"
@@ -115,7 +115,7 @@ const usageRows = computed(() => [
     </motion.div>
 
     <motion.div :initial="{ opacity: 0, y: 8 }" :animate="{ opacity: 1, y: 0 }" :transition="{ duration: 0.4, delay: 0.15 }">
-      <div class="grid grid-cols-2 gap-3">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <Card>
           <CardContent class="p-4">
             <div class="flex items-center gap-2 mb-1.5">
@@ -179,7 +179,7 @@ const usageRows = computed(() => [
       <h2 class="text-base font-semibold mb-1">Available plans</h2>
       <p class="text-xs text-muted-foreground mb-3">Switch any time. Change applies to the next billing cycle.</p>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         <Card
           v-for="plan in plans"
           :key="plan.id"

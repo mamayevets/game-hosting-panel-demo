@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { servers } from '@/data/servers'
+import { useServersStore } from '@/stores/servers'
+import { storeToRefs } from 'pinia'
 import { trends, playerHistory7d, playerHistory30d, playerHistory90d } from '@/data/analytics'
 import StatusBadge from '@/components/StatusBadge.vue'
 import GameIcon from '@/components/GameIcon.vue'
@@ -24,6 +25,8 @@ import { motion } from 'motion-v'
 import { toast } from 'vue-sonner'
 
 const router = useRouter()
+const serversStore = useServersStore()
+const { list: servers } = storeToRefs(serversStore)
 const range = ref<'90d' | '30d' | '7d'>('90d')
 const series = computed(() => {
   if (range.value === '7d') return playerHistory7d
@@ -35,14 +38,14 @@ const search = ref('')
 const tab = ref<'all' | ServerStatus>('all')
 
 const counts = computed(() => ({
-  all: servers.length,
-  online: servers.filter((s) => s.status === 'online').length,
-  offline: servers.filter((s) => s.status === 'offline').length,
-  starting: servers.filter((s) => s.status === 'starting').length,
+  all: servers.value.length,
+  online: servers.value.filter((s) => s.status === 'online').length,
+  offline: servers.value.filter((s) => s.status === 'offline').length,
+  starting: servers.value.filter((s) => s.status === 'starting').length,
 }))
 
 const filtered = computed(() => {
-  return servers.filter((s) => {
+  return servers.value.filter((s) => {
     if (tab.value !== 'all' && s.status !== tab.value) return false
     if (search.value && !s.name.toLowerCase().includes(search.value.toLowerCase())) return false
     return true
@@ -70,6 +73,8 @@ function go(id: string) {
 function notify(label: string, description?: string) {
   toast.message(label, description ? { description } : undefined)
 }
+
+const emit = defineEmits<{ quickCreate: [] }>()
 
 const stats = computed(() => [
   {
@@ -208,7 +213,7 @@ const stats = computed(() => [
                 <Settings2 class="h-3.5 w-3.5" />
                 <span class="hidden md:inline">Customize</span>
               </Button>
-              <Button size="sm" class="gap-1.5 shrink-0" @click="notify('New server', 'Hooks into provisioning API in production.')">
+              <Button size="sm" class="gap-1.5 shrink-0" @click="emit('quickCreate')">
                 <Plus class="h-3.5 w-3.5" />
                 <span class="hidden sm:inline">New server</span>
               </Button>
@@ -236,13 +241,10 @@ const stats = computed(() => [
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  <motion.tr
-                    v-for="(server, i) in filtered"
+                  <TableRow
+                    v-for="server in filtered"
                     :key="server.id"
-                    :initial="{ opacity: 0, x: -6 }"
-                    :animate="{ opacity: 1, x: 0 }"
-                    :transition="{ duration: 0.3, delay: 0.04 * i }"
-                    class="group cursor-pointer border-b transition-colors hover:bg-muted/40 data-[state=selected]:bg-muted"
+                    class="group cursor-pointer transition-colors hover:bg-muted/40 data-[state=selected]:bg-muted"
                     :data-state="selectedIds.has(server.id) ? 'selected' : undefined"
                     @click="go(server.id)"
                   >
@@ -291,7 +293,7 @@ const stats = computed(() => [
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
-                  </motion.tr>
+                                  </TableRow>
                   <TableRow v-if="filtered.length === 0">
                     <TableCell :colspan="10" class="h-24 text-center text-muted-foreground">
                       No servers match your filters.
