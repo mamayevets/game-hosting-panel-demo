@@ -1,11 +1,21 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { servers } from '../data/servers'
-import StatusBadge from '../components/StatusBadge.vue'
-import GameIcon from '../components/GameIcon.vue'
-import type { Game, ServerStatus } from '../types'
-import { Search, Plus, Cpu, MemoryStick, Users, MapPin } from 'lucide-vue-next'
+import { useRouter } from 'vue-router'
+import { servers } from '@/data/servers'
+import StatusBadge from '@/components/StatusBadge.vue'
+import GameIcon from '@/components/GameIcon.vue'
+import type { Game, ServerStatus } from '@/types'
+import { Search, Plus, Cpu, MemoryStick, Users, Globe2, ArrowRight, Activity, Server as ServerIcon, HardDrive } from 'lucide-vue-next'
+import { Card, CardContent } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Progress } from '@/components/ui/progress'
+import { Badge } from '@/components/ui/badge'
+import { motion } from 'motion-v'
+import { toast } from 'vue-sonner'
 
+const router = useRouter()
 const search = ref('')
 const gameFilter = ref<Game | 'all'>('all')
 const statusFilter = ref<ServerStatus | 'all'>('all')
@@ -23,117 +33,176 @@ const onlineCount = computed(() => servers.filter((s) => s.status === 'online').
 const totalRam = computed(() => servers.reduce((sum, s) => sum + s.ramGb, 0))
 const totalPlayers = computed(() => servers.reduce((sum, s) => sum + s.playersOnline, 0))
 
-const games: Game[] = ['minecraft', 'rust', 'ark', 'palworld', 'valheim', 'cs2']
-const gameLabel: Record<Game, string> = {
-  minecraft: 'Minecraft',
-  rust: 'RUST',
-  ark: 'ARK',
-  palworld: 'Palworld',
-  valheim: 'Valheim',
-  cs2: 'CS2',
+const games: { value: Game; label: string }[] = [
+  { value: 'minecraft', label: 'Minecraft' },
+  { value: 'rust', label: 'RUST' },
+  { value: 'ark', label: 'ARK' },
+  { value: 'palworld', label: 'Palworld' },
+  { value: 'valheim', label: 'Valheim' },
+  { value: 'cs2', label: 'CS2' },
+]
+
+function go(id: string) {
+  router.push({ name: 'server-detail', params: { id } })
+}
+
+function handleNewServer() {
+  toast.info('New server flow', {
+    description: 'Hooks into the provisioning API in production.',
+  })
 }
 </script>
 
 <template>
   <div class="p-8 max-w-7xl mx-auto">
-    <header class="flex items-center justify-between mb-8">
+    <motion.header
+      :initial="{ opacity: 0, y: -8 }"
+      :animate="{ opacity: 1, y: 0 }"
+      :transition="{ duration: 0.4 }"
+      class="flex items-center justify-between mb-8"
+    >
       <div>
-        <h1 class="text-2xl font-bold">Your servers</h1>
-        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+        <h1 class="text-2xl font-bold tracking-tight">Your servers</h1>
+        <p class="text-sm text-muted-foreground mt-1">
           {{ servers.length }} servers · {{ onlineCount }} online · {{ totalPlayers }} players right now
         </p>
       </div>
-      <button class="btn-primary flex items-center gap-1.5">
+      <Button class="gap-1.5" @click="handleNewServer">
         <Plus class="h-4 w-4" /> New server
-      </button>
-    </header>
+      </Button>
+    </motion.header>
 
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-      <div class="card p-4">
-        <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400 font-medium">Servers online</p>
-        <p class="text-2xl font-bold mt-1">{{ onlineCount }} / {{ servers.length }}</p>
-      </div>
-      <div class="card p-4">
-        <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400 font-medium">Total RAM</p>
-        <p class="text-2xl font-bold mt-1">{{ totalRam }} GB</p>
-      </div>
-      <div class="card p-4">
-        <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400 font-medium">Players online</p>
-        <p class="text-2xl font-bold mt-1">{{ totalPlayers }}</p>
-      </div>
+      <motion.div
+        v-for="(stat, i) in [
+          { label: 'Servers online', value: `${onlineCount} / ${servers.length}`, icon: ServerIcon, accent: 'text-emerald-500' },
+          { label: 'Total RAM', value: `${totalRam} GB`, icon: HardDrive, accent: 'text-blue-500' },
+          { label: 'Players online', value: `${totalPlayers}`, icon: Activity, accent: 'text-violet-500' },
+        ]"
+        :key="stat.label"
+        :initial="{ opacity: 0, y: 12 }"
+        :animate="{ opacity: 1, y: 0 }"
+        :transition="{ duration: 0.4, delay: 0.05 * i }"
+      >
+        <Card class="border-border/60 hover:shadow-md transition-shadow">
+          <CardContent class="p-5 flex items-center justify-between">
+            <div>
+              <p class="text-[11px] uppercase tracking-wide text-muted-foreground font-semibold">{{ stat.label }}</p>
+              <p class="text-2xl font-bold mt-1.5 tabular-nums">{{ stat.value }}</p>
+            </div>
+            <div class="h-10 w-10 rounded-xl bg-muted flex items-center justify-center" :class="stat.accent">
+              <component :is="stat.icon" class="h-5 w-5" />
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
     </div>
 
     <div class="flex flex-col sm:flex-row gap-3 mb-6">
       <div class="relative flex-1">
-        <Search class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-        <input
-          v-model="search"
-          type="text"
-          placeholder="Search servers…"
-          class="input pl-9"
-        />
+        <Search class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input v-model="search" type="text" placeholder="Search servers…" class="pl-9" />
       </div>
-      <select v-model="gameFilter" class="input sm:w-44">
-        <option value="all">All games</option>
-        <option v-for="g in games" :key="g" :value="g">{{ gameLabel[g] }}</option>
-      </select>
-      <select v-model="statusFilter" class="input sm:w-44">
-        <option value="all">All statuses</option>
-        <option value="online">Online</option>
-        <option value="offline">Offline</option>
-        <option value="starting">Starting</option>
-      </select>
+      <Select v-model="gameFilter">
+        <SelectTrigger class="sm:w-44">
+          <SelectValue placeholder="All games" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">All games</SelectItem>
+          <SelectItem v-for="g in games" :key="g.value" :value="g.value">{{ g.label }}</SelectItem>
+        </SelectContent>
+      </Select>
+      <Select v-model="statusFilter">
+        <SelectTrigger class="sm:w-44">
+          <SelectValue placeholder="All statuses" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">All statuses</SelectItem>
+          <SelectItem value="online">Online</SelectItem>
+          <SelectItem value="offline">Offline</SelectItem>
+          <SelectItem value="starting">Starting</SelectItem>
+        </SelectContent>
+      </Select>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-      <RouterLink
-        v-for="server in filtered"
+      <motion.div
+        v-for="(server, i) in filtered"
         :key="server.id"
-        :to="{ name: 'server-detail', params: { id: server.id } }"
-        class="card p-5 hover:shadow-lg hover:border-brand-500/50 dark:hover:border-brand-500/50 transition group cursor-pointer"
+        :initial="{ opacity: 0, y: 12 }"
+        :animate="{ opacity: 1, y: 0 }"
+        :transition="{ duration: 0.35, delay: 0.04 * i }"
+        :while-hover="{ y: -2 }"
       >
-        <div class="flex items-start gap-4">
-          <GameIcon :game="server.game" size="lg" />
-          <div class="flex-1 min-w-0">
-            <div class="flex items-start justify-between gap-3">
-              <div class="min-w-0">
-                <h3 class="font-semibold truncate group-hover:text-brand-600 dark:group-hover:text-brand-400 transition">{{ server.name }}</h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-mono">{{ server.ipAddress }}:{{ server.port }}</p>
-              </div>
-              <StatusBadge :status="server.status" />
-            </div>
+        <Card
+          role="button"
+          tabindex="0"
+          class="cursor-pointer border-border/60 hover:border-primary/40 hover:shadow-lg transition-all group"
+          @click="go(server.id)"
+          @keydown.enter="go(server.id)"
+          @keydown.space.prevent="go(server.id)"
+        >
+          <CardContent class="p-5">
+            <div class="flex items-start gap-4">
+              <GameIcon :game="server.game" size="xl" />
+              <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between gap-3">
+                  <div class="min-w-0">
+                    <h3 class="font-semibold truncate group-hover:text-primary transition-colors">{{ server.name }}</h3>
+                    <p class="text-xs text-muted-foreground mt-0.5 font-mono">{{ server.ipAddress }}:{{ server.port }}</p>
+                  </div>
+                  <StatusBadge :status="server.status" />
+                </div>
 
-            <div class="grid grid-cols-2 gap-3 mt-4">
-              <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                <Cpu class="h-3.5 w-3.5" />
-                <span>{{ server.cpuPercent }}% CPU</span>
-              </div>
-              <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                <MemoryStick class="h-3.5 w-3.5" />
-                <span>{{ server.ramUsedPercent }}% of {{ server.ramGb }}GB</span>
-              </div>
-              <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                <Users class="h-3.5 w-3.5" />
-                <span>{{ server.playersOnline }} / {{ server.playersMax }} players</span>
-              </div>
-              <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                <MapPin class="h-3.5 w-3.5" />
-                <span>{{ server.region }}</span>
-              </div>
-            </div>
+                <div class="grid grid-cols-2 gap-x-4 gap-y-3 mt-4">
+                  <div class="space-y-1">
+                    <div class="flex items-center justify-between text-xs">
+                      <span class="flex items-center gap-1.5 text-muted-foreground">
+                        <Cpu class="h-3 w-3" /> CPU
+                      </span>
+                      <span class="font-medium tabular-nums">{{ server.cpuPercent }}%</span>
+                    </div>
+                    <Progress :model-value="server.cpuPercent" class="h-1" />
+                  </div>
+                  <div class="space-y-1">
+                    <div class="flex items-center justify-between text-xs">
+                      <span class="flex items-center gap-1.5 text-muted-foreground">
+                        <MemoryStick class="h-3 w-3" /> RAM
+                      </span>
+                      <span class="font-medium tabular-nums">{{ server.ramUsedPercent }}%</span>
+                    </div>
+                    <Progress :model-value="server.ramUsedPercent" class="h-1" />
+                  </div>
+                  <div class="flex items-center gap-2 text-xs text-muted-foreground">
+                    <Users class="h-3 w-3" />
+                    <span>{{ server.playersOnline }} / {{ server.playersMax }} players</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-xs text-muted-foreground">
+                    <Globe2 class="h-3 w-3" />
+                    <span class="capitalize">{{ server.region.replace('-', ' ') }}</span>
+                  </div>
+                </div>
 
-            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
-              <span class="text-slate-500 dark:text-slate-400">{{ server.plan }} · {{ server.version }}</span>
-              <span class="text-brand-600 dark:text-brand-400 font-medium group-hover:translate-x-0.5 transition">Manage →</span>
+                <div class="mt-4 pt-3 border-t flex items-center justify-between text-xs">
+                  <Badge variant="secondary" class="font-normal">{{ server.plan }} · {{ server.version }}</Badge>
+                  <span class="text-primary font-medium flex items-center gap-1 group-hover:gap-1.5 transition-all">
+                    Manage
+                    <ArrowRight class="h-3 w-3" />
+                  </span>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </RouterLink>
+          </CardContent>
+        </Card>
+      </motion.div>
     </div>
 
-    <div v-if="filtered.length === 0" class="card p-16 text-center mt-6">
-      <p class="text-slate-400 text-5xl mb-3">📭</p>
-      <p class="text-slate-600 dark:text-slate-400 font-medium">No servers match your filters</p>
-    </div>
+    <Card v-if="filtered.length === 0" class="mt-6">
+      <CardContent class="py-16 text-center">
+        <div class="text-5xl mb-3">📭</div>
+        <p class="text-foreground font-medium">No servers match your filters</p>
+        <p class="text-sm text-muted-foreground mt-1">Try changing the search query or game type.</p>
+      </CardContent>
+    </Card>
   </div>
 </template>
