@@ -15,9 +15,10 @@ Hosted on Cloudflare Pages. Login with any email + password (it's a mock).
 - **Vite** for build tooling
 - **Vue Router** for client-side routing
 - **Pinia** for state management
-- **Tailwind CSS** for styling
+- **shadcn-vue** + **reka-ui** + **Tailwind CSS** for the design system
+- **motion-v** for page transitions, stagger lists, and hover interactions
 - **Chart.js** + **vue-chartjs** for live resource graphs
-- **Lucide** icons
+- **Lucide** icons + **vue-sonner** toasts
 
 No backend — all data is mocked in `src/data/*.ts` to keep the demo focused on UI/UX.
 
@@ -33,8 +34,10 @@ No backend — all data is mocked in `src/data/*.ts` to keep the demo focused on
 
 ## Highlights
 
+- **shadcn-vue design system** — Card, Button, Input, Tabs, Dialog, Sheet, DropdownMenu, Switch, Sonner toasts, etc., all themed via CSS variables
 - **Live-streaming resource charts** — CPU / RAM / players update every 2.5 s
 - **Animated console** — log lines stream in like a real game server
+- **Page transitions + stagger animations** via motion-v
 - **File tree** with persistent expand/collapse state
 - **Plugin marketplace** with search and install/uninstall toggles
 - **Dark mode** — system-preference aware, persisted in localStorage
@@ -71,10 +74,13 @@ src/
 │   ├── auth.ts              ← mock login persisted in localStorage
 │   └── theme.ts             ← light / dark with system preference
 ├── components/
+│   ├── ui/                  ← shadcn-vue primitives (Button, Card, Tabs, …)
 │   ├── Sidebar.vue          ← left navigation, logout, theme toggle
 │   ├── StatusBadge.vue      ← coloured pill for server status
 │   ├── GameIcon.vue         ← per-game emoji + color
 │   └── ResourceChart.vue    ← Chart.js wrapper for CPU/RAM/players
+├── lib/
+│   └── utils.ts             ← cn() className helper (clsx + tailwind-merge)
 ├── pages/
 │   ├── Login.vue
 │   ├── ServerList.vue
