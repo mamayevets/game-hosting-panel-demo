@@ -73,51 +73,45 @@ const bottomNav = [
 
     <Separator />
 
-    <nav class="flex-1 overflow-y-auto px-2 py-3 space-y-3">
-      <div class="space-y-0.5">
-        <RouterLink
-          v-for="item in primaryNav"
-          :key="item.name"
-          v-slot="{ isActive, navigate, href }"
-          :to="{ name: item.name }"
-          custom
+    <nav class="flex-1 overflow-y-auto px-2 py-3 space-y-0.5">
+      <RouterLink
+        v-for="item in primaryNav"
+        :key="item.name"
+        v-slot="{ isActive, navigate, href }"
+        :to="{ name: item.name }"
+        custom
+      >
+        <a
+          :href="href"
+          class="flex items-center gap-2.5 px-2 py-1.5 rounded-md text-sm transition-colors"
+          :class="isActive
+            ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium'
+            : 'text-muted-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground'"
+          @click="(e: MouseEvent) => { navigate(e); emit('navigate') }"
         >
-          <a
-            :href="href"
-            class="flex items-center gap-2.5 px-2 py-1.5 rounded-md text-sm transition-colors"
-            :class="isActive
-              ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium'
-              : 'text-muted-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground'"
-            @click="(e: MouseEvent) => { navigate(e); emit('navigate') }"
-          >
-            <component :is="item.icon" class="h-4 w-4" />
-            {{ item.label }}
-          </a>
-        </RouterLink>
-      </div>
-
-      <div class="space-y-0.5">
-        <p class="px-2 py-1.5 text-[10px] uppercase tracking-wider text-muted-foreground/70 font-medium">Resources</p>
-        <RouterLink
-          v-for="item in resourceNav"
-          :key="item.name"
-          v-slot="{ isActive, navigate, href }"
-          :to="{ name: item.name }"
-          custom
+          <component :is="item.icon" class="h-4 w-4" />
+          {{ item.label }}
+        </a>
+      </RouterLink>
+      <RouterLink
+        v-for="item in resourceNav"
+        :key="item.name"
+        v-slot="{ isActive, navigate, href }"
+        :to="{ name: item.name }"
+        custom
+      >
+        <a
+          :href="href"
+          class="flex items-center gap-2.5 px-2 py-1.5 rounded-md text-sm transition-colors"
+          :class="isActive
+            ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium'
+            : 'text-muted-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground'"
+          @click="(e: MouseEvent) => { navigate(e); emit('navigate') }"
         >
-          <a
-            :href="href"
-            class="flex items-center gap-2.5 px-2 py-1.5 rounded-md text-sm transition-colors"
-            :class="isActive
-              ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium'
-              : 'text-muted-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground'"
-            @click="(e: MouseEvent) => { navigate(e); emit('navigate') }"
-          >
-            <component :is="item.icon" class="h-4 w-4" />
-            {{ item.label }}
-          </a>
-        </RouterLink>
-      </div>
+          <component :is="item.icon" class="h-4 w-4" />
+          {{ item.label }}
+        </a>
+      </RouterLink>
     </nav>
 
     <Separator />

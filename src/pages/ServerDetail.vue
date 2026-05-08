@@ -351,7 +351,7 @@ const livePlayersOnline = computed(() => {
     </motion.div>
 
     <Tabs v-model="activeTab" class="space-y-6">
-      <TabsList class="grid grid-cols-4 w-full h-9">
+      <TabsList class="grid grid-cols-4 w-full">
         <TabsTrigger value="overview" class="gap-1.5 text-xs sm:text-sm">
           <Activity class="h-3.5 w-3.5" /> Overview
         </TabsTrigger>

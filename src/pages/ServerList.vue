@@ -9,7 +9,7 @@ import GameIcon from '@/components/GameIcon.vue'
 import PlayersAreaChart from '@/components/PlayersAreaChart.vue'
 import type { ServerStatus } from '@/types'
 import {
-  Plus, TrendingUp, TrendingDown, MoreHorizontal, GripVertical,
+  Plus, TrendingUp, TrendingDown, MoreHorizontal,
   Search, Settings2, ArrowUpRight,
 } from 'lucide-vue-next'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
@@ -19,7 +19,6 @@ import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-import { Checkbox } from '@/components/ui/checkbox'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { motion } from 'motion-v'
 import { toast } from 'vue-sonner'
@@ -51,20 +50,6 @@ const filtered = computed(() => {
     return true
   })
 })
-
-const selectedIds = ref<Set<string>>(new Set())
-const allSelected = computed({
-  get: () => filtered.value.length > 0 && filtered.value.every((s) => selectedIds.value.has(s.id)),
-  set: (v: boolean) => {
-    if (v) filtered.value.forEach((s) => selectedIds.value.add(s.id))
-    else filtered.value.forEach((s) => selectedIds.value.delete(s.id))
-  },
-})
-
-function toggle(id: string, v: boolean | 'indeterminate') {
-  if (v === true) selectedIds.value.add(id)
-  else selectedIds.value.delete(id)
-}
 
 function go(id: string) {
   router.push({ name: 'server-detail', params: { id } })
@@ -221,15 +206,12 @@ const stats = computed(() => [
           </div>
 
           <TabsContent :value="tab" force-mount>
+            <motion.div :initial="{ opacity: 0, y: 4 }" :animate="{ opacity: 1, y: 0 }" :transition="{ duration: 0.2 }">
             <Card class="overflow-hidden">
               <div class="overflow-x-auto">
               <Table class="min-w-[860px]">
                 <TableHeader class="bg-muted/40">
                   <TableRow class="hover:bg-transparent">
-                    <TableHead class="w-10">
-                      <Checkbox v-model="allSelected" />
-                    </TableHead>
-                    <TableHead class="w-6" />
                     <TableHead>Server</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Region</TableHead>
@@ -244,16 +226,9 @@ const stats = computed(() => [
                   <TableRow
                     v-for="server in filtered"
                     :key="server.id"
-                    class="group cursor-pointer transition-colors hover:bg-muted/40 data-[state=selected]:bg-muted"
-                    :data-state="selectedIds.has(server.id) ? 'selected' : undefined"
+                    class="group cursor-pointer transition-colors hover:bg-muted/40"
                     @click="go(server.id)"
                   >
-                    <TableCell @click.stop>
-                      <Checkbox :model-value="selectedIds.has(server.id)" @update:model-value="(v) => toggle(server.id, v)" />
-                    </TableCell>
-                    <TableCell class="text-muted-foreground/40 group-hover:text-muted-foreground transition-colors">
-                      <GripVertical class="h-4 w-4" />
-                    </TableCell>
                     <TableCell>
                       <div class="flex items-center gap-3">
                         <GameIcon :game="server.game" size="sm" />
@@ -295,21 +270,15 @@ const stats = computed(() => [
                     </TableCell>
                                   </TableRow>
                   <TableRow v-if="filtered.length === 0">
-                    <TableCell :colspan="10" class="h-24 text-center text-muted-foreground">
+                    <TableCell :colspan="8" class="h-24 text-center text-muted-foreground">
                       No servers match your filters.
                     </TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
               </div>
-              <div class="flex items-center justify-between px-4 py-3 border-t text-xs text-muted-foreground">
-                <span>{{ selectedIds.size }} of {{ filtered.length }} row(s) selected</span>
-                <div class="flex items-center gap-2">
-                  <span>Rows per page</span>
-                  <Badge variant="outline" class="font-normal">{{ filtered.length }}</Badge>
-                </div>
-              </div>
             </Card>
+            </motion.div>
           </TabsContent>
         </Tabs>
       </motion.div>

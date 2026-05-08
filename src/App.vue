@@ -46,8 +46,8 @@ const pageTitle = computed(() => {
       <RouterView />
     </div>
 
-    <div v-else class="min-h-screen flex bg-background w-full max-w-[100vw] overflow-x-hidden">
-      <aside class="hidden lg:flex w-[260px] shrink-0">
+    <div v-else class="h-screen flex bg-background w-full max-w-[100vw] overflow-hidden">
+      <aside class="hidden lg:flex w-[260px] shrink-0 h-screen">
         <Sidebar
           @quick-create="quickCreateOpen = true"
           @open-search="commandOpen = true"
@@ -67,8 +67,8 @@ const pageTitle = computed(() => {
         </SheetContent>
       </Sheet>
 
-      <main class="flex-1 min-w-0 max-w-full flex flex-col overflow-x-hidden">
-        <header class="flex items-center justify-between gap-2 px-3 lg:px-6 h-14 border-b sticky top-0 bg-background/90 backdrop-blur z-30">
+      <main class="flex-1 min-w-0 max-w-full flex flex-col overflow-hidden">
+        <header class="flex items-center justify-between gap-2 px-3 lg:px-6 h-14 border-b shrink-0 bg-background/90 backdrop-blur z-30">
           <div class="flex items-center gap-2 min-w-0">
             <Button variant="ghost" size="icon" class="lg:hidden h-9 w-9 shrink-0" aria-label="Open menu" @click="mobileNavOpen = true">
               <Menu class="h-4 w-4" />
@@ -107,15 +107,17 @@ const pageTitle = computed(() => {
           </div>
         </header>
 
-        <RouterView v-slot="{ Component, route: r }">
-          <transition name="page" mode="out-in">
-            <component
-              :is="Component"
-              :key="r.fullPath"
-              @quick-create="quickCreateOpen = true"
-            />
-          </transition>
-        </RouterView>
+        <div class="flex-1 overflow-y-auto overflow-x-hidden">
+          <RouterView v-slot="{ Component, route: r }">
+            <transition name="page" mode="out-in">
+              <component
+                :is="Component"
+                :key="r.fullPath"
+                @quick-create="quickCreateOpen = true"
+              />
+            </transition>
+          </RouterView>
+        </div>
       </main>
     </div>
 
