@@ -50,14 +50,15 @@ function notify(label: string, description?: string) {
 </script>
 
 <template>
-  <div class="px-4 sm:px-6 lg:px-8 py-6 max-w-6xl mx-auto space-y-6">
+  <div class="px-3 sm:px-6 lg:px-8 py-6 max-w-6xl mx-auto space-y-6 min-w-0">
     <motion.header
       :initial="{ opacity: 0, y: -8 }"
       :animate="{ opacity: 1, y: 0 }"
       :transition="{ duration: 0.4 }"
+      class="min-w-0"
     >
       <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Billing</h1>
-      <p class="text-sm text-muted-foreground mt-1">Subscription, payment methods, invoices, and plan upgrades.</p>
+      <p class="text-sm text-muted-foreground mt-1 break-words">Manage your subscription and invoices.</p>
     </motion.header>
 
     <motion.div
@@ -66,18 +67,18 @@ function notify(label: string, description?: string) {
       :transition="{ duration: 0.4, delay: 0.05 }"
     >
       <Card class="overflow-hidden border-border/60">
-        <CardContent class="p-5 sm:p-6">
-          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-            <div class="space-y-1.5 min-w-0">
+        <CardContent class="p-4 sm:p-6">
+          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 min-w-0">
+            <div class="space-y-1.5 min-w-0 w-full sm:w-auto">
               <div class="flex items-center gap-2 flex-wrap">
                 <Badge class="bg-emerald-500/10 text-emerald-500 border-emerald-500/20 hover:bg-emerald-500/10">
                   <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 mr-1.5" /> Active
                 </Badge>
-                <span class="text-xs text-muted-foreground">Workspace plan · 5 servers · billed monthly</span>
+                <span class="text-xs text-muted-foreground break-words">Workspace plan · 5 servers · monthly</span>
               </div>
               <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight tabular-nums">${{ nextCharge.amount.toFixed(2) }}<span class="text-sm sm:text-base font-normal text-muted-foreground">/mo</span></h2>
-              <p class="text-xs text-muted-foreground">
-                Renews <span class="font-medium text-foreground">{{ nextCharge.date }}</span> · Visa ending in 4242
+              <p class="text-xs text-muted-foreground break-words">
+                Renews <span class="font-medium text-foreground">{{ nextCharge.date }}</span> · Visa · 4242
               </p>
             </div>
             <div class="grid grid-cols-2 sm:flex gap-2 sm:shrink-0 w-full sm:w-auto">
@@ -104,34 +105,34 @@ function notify(label: string, description?: string) {
 
           <Separator class="my-5" />
 
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
-            <div>
-              <div class="flex items-center justify-between text-xs mb-1.5">
-                <span class="text-muted-foreground font-medium">RAM utilization</span>
-                <span class="tabular-nums font-mono">{{ planUsedPercent }}%</span>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 min-w-0">
+            <div class="min-w-0">
+              <div class="flex items-center justify-between gap-2 text-xs mb-1.5">
+                <span class="text-muted-foreground font-medium truncate">RAM</span>
+                <span class="tabular-nums font-mono shrink-0">{{ planUsedPercent }}%</span>
               </div>
               <Progress :model-value="planUsedPercent" class="h-1.5" />
-              <p class="text-[11px] text-muted-foreground mt-1.5 tabular-nums">
-                {{ ((planUsedPercent / 100) * planTotalGb).toFixed(1) }} of {{ planTotalGb }} GB across servers
+              <p class="text-[11px] text-muted-foreground mt-1.5 tabular-nums truncate">
+                {{ ((planUsedPercent / 100) * planTotalGb).toFixed(1) }} / {{ planTotalGb }} GB
               </p>
             </div>
-            <div>
-              <div class="flex items-center justify-between text-xs mb-1.5">
-                <span class="text-muted-foreground font-medium">Disk utilization</span>
-                <span class="tabular-nums font-mono">{{ diskUsedPercent }}%</span>
+            <div class="min-w-0">
+              <div class="flex items-center justify-between gap-2 text-xs mb-1.5">
+                <span class="text-muted-foreground font-medium truncate">Disk</span>
+                <span class="tabular-nums font-mono shrink-0">{{ diskUsedPercent }}%</span>
               </div>
               <Progress :model-value="diskUsedPercent" class="h-1.5" />
-              <p class="text-[11px] text-muted-foreground mt-1.5 tabular-nums">
-                {{ usedDiskGb.toFixed(1) }} of {{ totalDiskGb }} GB
+              <p class="text-[11px] text-muted-foreground mt-1.5 tabular-nums truncate">
+                {{ usedDiskGb.toFixed(1) }} / {{ totalDiskGb }} GB
               </p>
             </div>
-            <div>
-              <div class="flex items-center justify-between text-xs mb-1.5">
-                <span class="text-muted-foreground font-medium">Player slots</span>
-                <span class="tabular-nums font-mono">{{ usedPlayerSlots }} / {{ totalPlayerSlots }}</span>
+            <div class="min-w-0">
+              <div class="flex items-center justify-between gap-2 text-xs mb-1.5">
+                <span class="text-muted-foreground font-medium truncate">Players</span>
+                <span class="tabular-nums font-mono shrink-0">{{ usedPlayerSlots }}/{{ totalPlayerSlots }}</span>
               </div>
               <Progress :model-value="(usedPlayerSlots / totalPlayerSlots) * 100" class="h-1.5" />
-              <p class="text-[11px] text-muted-foreground mt-1.5">Slots reserved across all servers</p>
+              <p class="text-[11px] text-muted-foreground mt-1.5 truncate">Across all servers</p>
             </div>
           </div>
         </CardContent>

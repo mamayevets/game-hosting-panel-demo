@@ -46,7 +46,7 @@ const pageTitle = computed(() => {
       <RouterView />
     </div>
 
-    <div v-else class="min-h-screen flex bg-background">
+    <div v-else class="min-h-screen flex bg-background w-full max-w-[100vw] overflow-x-hidden">
       <aside class="hidden lg:flex w-[260px] shrink-0">
         <Sidebar
           @quick-create="quickCreateOpen = true"
@@ -67,7 +67,7 @@ const pageTitle = computed(() => {
         </SheetContent>
       </Sheet>
 
-      <main class="flex-1 min-w-0 flex flex-col overflow-x-hidden">
+      <main class="flex-1 min-w-0 max-w-full flex flex-col overflow-x-hidden">
         <header class="flex items-center justify-between gap-2 px-3 lg:px-6 h-14 border-b sticky top-0 bg-background/90 backdrop-blur z-30">
           <div class="flex items-center gap-2 min-w-0">
             <Button variant="ghost" size="icon" class="lg:hidden h-9 w-9 shrink-0" aria-label="Open menu" @click="mobileNavOpen = true">
