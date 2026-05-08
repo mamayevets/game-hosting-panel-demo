@@ -367,6 +367,7 @@ const livePlayersOnline = computed(() => {
       </TabsList>
 
       <TabsContent value="overview" class="space-y-6">
+        <motion.div :initial="{ opacity: 0, y: 6 }" :animate="{ opacity: 1, y: 0 }" :transition="{ duration: 0.2 }">
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
           <Card>
             <CardContent class="p-4 sm:p-5">
@@ -455,9 +456,11 @@ const livePlayersOnline = computed(() => {
             </CardContent>
           </Card>
         </div>
+      </motion.div>
       </TabsContent>
 
       <TabsContent value="console" class="space-y-3">
+        <motion.div :initial="{ opacity: 0, y: 6 }" :animate="{ opacity: 1, y: 0 }" :transition="{ duration: 0.2 }">
         <Card class="overflow-hidden">
           <div
             ref="consoleEl"
@@ -485,9 +488,11 @@ const livePlayersOnline = computed(() => {
             <span class="hidden sm:inline">Send</span>
           </Button>
         </form>
+      </motion.div>
       </TabsContent>
 
       <TabsContent value="files">
+        <motion.div :initial="{ opacity: 0, y: 6 }" :animate="{ opacity: 1, y: 0 }" :transition="{ duration: 0.2 }">
         <Card class="overflow-hidden">
           <div class="px-4 sm:px-5 py-3 border-b text-xs sm:text-sm font-mono text-muted-foreground bg-muted/30">/var/server</div>
           <div class="divide-y">
@@ -534,9 +539,11 @@ const livePlayersOnline = computed(() => {
             </template>
           </div>
         </Card>
+      </motion.div>
       </TabsContent>
 
       <TabsContent value="plugins" class="space-y-4">
+        <motion.div :initial="{ opacity: 0, y: 6 }" :animate="{ opacity: 1, y: 0 }" :transition="{ duration: 0.2 }">
         <div class="relative">
           <Search class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input v-model="pluginSearch" placeholder="Search plugins…" class="pl-9" />
@@ -572,6 +579,7 @@ const livePlayersOnline = computed(() => {
             </Card>
           </motion.div>
         </div>
+      </motion.div>
       </TabsContent>
     </Tabs>
   </div>
