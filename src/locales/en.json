@@ -1,0 +1,359 @@
+{
+  "sidebar": {
+    "title": "Test Panel",
+    "subtitle": "Hosting Demo",
+    "quickCreate": "Quick Create",
+    "search": "Search",
+    "searchShortcut": "⌘K",
+    "nav": {
+      "servers": "Servers",
+      "billing": "Billing",
+      "account": "Account",
+      "activity": "Activity log",
+      "backups": "Backups",
+      "apiReference": "API reference",
+      "settings": "Settings",
+      "help": "Help & support"
+    },
+    "user": {
+      "owner": "Owner",
+      "accountSettings": "Account settings",
+      "signOut": "Sign out"
+    }
+  },
+  "header": {
+    "search": "Search…",
+    "github": "GitHub"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "stats": {
+      "serversOnline": "Servers online",
+      "activePlayers": "Active players",
+      "provisionedRam": "Provisioned RAM",
+      "uptime30d": "Uptime (30d)"
+    },
+    "chart": {
+      "title": "Total active players",
+      "subtitle": "Aggregated across every hosted server",
+      "7days": "7 days",
+      "30days": "30 days",
+      "3months": "3 months"
+    },
+    "tabs": {
+      "all": "All",
+      "online": "Online",
+      "offline": "Offline",
+      "starting": "Starting"
+    },
+    "table": {
+      "server": "Server",
+      "status": "Status",
+      "region": "Region",
+      "cpu": "CPU",
+      "ram": "RAM",
+      "players": "Players",
+      "plan": "Plan",
+      "noMatch": "No servers match your filters.",
+      "customize": "Customize",
+      "newServer": "New server"
+    }
+  },
+  "serverDetail": {
+    "backToServers": "All servers",
+    "status": {
+      "online": "Online",
+      "offline": "Offline",
+      "starting": "Starting",
+      "restarting": "Restarting…",
+      "stopping": "Stopping…"
+    },
+    "actions": {
+      "restart": "Restart",
+      "restarting": "Restarting…",
+      "done": "Done",
+      "stop": "Stop",
+      "stopped": "Stopped",
+      "start": "Start",
+      "started": "Started",
+      "starting": "Starting…",
+      "backup": "Backup",
+      "saved": "Saved",
+      "backupInProgress": "Backup in progress…"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "console": "Console",
+      "files": "Files",
+      "plugins": "Plugins"
+    },
+    "overview": {
+      "cpu": "CPU",
+      "ram": "RAM ({gb} GB)",
+      "players": "Players",
+      "connection": "Connection",
+      "game": "Game",
+      "version": "Version",
+      "plan": "Plan",
+      "region": "Region",
+      "disk": "Disk",
+      "uptime": "Uptime",
+      "renews": "Renews",
+      "playersOnline": "Players online ({count})",
+      "noPlayers": "No players online",
+      "serverStatus": "Server is {status}"
+    },
+    "console": {
+      "placeholder": "say Hello, list, save-all…",
+      "send": "Send"
+    },
+    "files": {
+      "root": "/var/server"
+    },
+    "plugins": {
+      "search": "Search plugins…",
+      "downloads": "{count} downloads"
+    },
+    "notFound": {
+      "title": "Server not found",
+      "back": "Back to servers"
+    }
+  },
+  "billing": {
+    "title": "Billing",
+    "subtitle": "Manage your subscription and invoices.",
+    "plan": {
+      "active": "Active",
+      "workspacePlan": "Workspace plan",
+      "perMonth": "/mo",
+      "renews": "Renews",
+      "updateCard": "Update card",
+      "manage": "Manage",
+      "pause": "Pause subscription",
+      "switchAnnual": "Switch to annual",
+      "cancel": "Cancel subscription"
+    },
+    "usage": {
+      "title": "Usage",
+      "subtitle": "Across every server in this workspace.",
+      "ram": "RAM",
+      "disk": "Disk",
+      "playerSlots": "Player slots"
+    },
+    "stats": {
+      "next": "Next",
+      "lifetime": "Lifetime",
+      "invoices": "invoices"
+    },
+    "invoices": {
+      "title": "Invoice history",
+      "subtitle": "Auto-generated and emailed on each successful charge.",
+      "download": "Download PDF"
+    },
+    "plans": {
+      "title": "Available plans",
+      "subtitle": "Switch any time. Change applies to the next billing cycle.",
+      "popular": "Popular",
+      "perMonth": "/ mo",
+      "choosePlan": "Choose plan"
+    }
+  },
+  "account": {
+    "title": "Account",
+    "subtitle": "Manage your profile, security, and notifications",
+    "profile": {
+      "title": "Profile",
+      "fullName": "Full name",
+      "email": "Email",
+      "company": "Company",
+      "timezone": "Timezone",
+      "save": "Save changes"
+    },
+    "security": {
+      "title": "Security",
+      "subtitle": "Two-factor auth and active sessions",
+      "twoFactor": "Two-factor authentication",
+      "enabled": "Enabled — TOTP via authenticator app",
+      "disabled": "Disabled"
+    },
+    "apiKeys": {
+      "title": "API Keys",
+      "subtitle": "Programmatic access to the Godlike API",
+      "copy": "Copy",
+      "regenerate": "Regenerate"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "serverDown": {
+        "label": "Server goes down",
+        "desc": "Email alert if any of your servers stops responding"
+      },
+      "paymentFailed": {
+        "label": "Payment failed",
+        "desc": "Be notified if a charge doesn't go through"
+      },
+      "weeklyReport": {
+        "label": "Weekly usage report",
+        "desc": "Summary of CPU, RAM, and player activity each Monday"
+      },
+      "productUpdates": {
+        "label": "Product updates",
+        "desc": "New games, features, and releases"
+      }
+    }
+  },
+  "activityLog": {
+    "title": "Activity log",
+    "subtitle": "Audit trail of every action across servers, backups, billing, and access.",
+    "search": "Search events…",
+    "allKinds": "All kinds",
+    "noMatch": "No matching events."
+  },
+  "backups": {
+    "title": "Backups",
+    "subtitle": "Daily snapshots and on-demand backups.",
+    "newBackup": "New backup",
+    "stats": {
+      "snapshots": "Snapshots",
+      "totalSize": "Total size",
+      "success": "Success",
+      "retention": "Retention"
+    },
+    "allSnapshots": {
+      "title": "All snapshots",
+      "subtitle": "Tap a row to open the server. Use the menu to restore or download."
+    },
+    "actions": {
+      "restore": "Restore",
+      "download": "Download",
+      "openServer": "Open server"
+    }
+  },
+  "apiReference": {
+    "title": "API reference",
+    "subtitle": "REST endpoints for the hosting panel.",
+    "endpoint": "api.testpanel.dev",
+    "postman": "Postman collection",
+    "authentication": {
+      "title": "Authentication",
+      "subtitle": "Send your API key in the Authorization header."
+    },
+    "copyPath": "Copy path"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Workspace-level preferences. Personal settings live under Account.",
+    "defaults": {
+      "title": "Defaults",
+      "subtitle": "Pre-fill these every time you provision a new server.",
+      "region": "Default region",
+      "language": "Panel language"
+    },
+    "behavior": {
+      "title": "Behavior",
+      "subtitle": "How the panel and your servers behave by default.",
+      "autoBackup": {
+        "label": "Daily auto-backup",
+        "desc": "Run a snapshot of every server at 04:00 in its region."
+      },
+      "reducedMotion": {
+        "label": "Reduced motion",
+        "desc": "Disable page transitions and stagger animations."
+      },
+      "compactTables": {
+        "label": "Compact tables",
+        "desc": "Tighter row spacing in lists and tables."
+      }
+    },
+    "save": "Save changes",
+    "cancel": "Cancel",
+    "dangerZone": {
+      "title": "Danger zone",
+      "subtitle": "These actions are permanent. Removing a workspace cancels all subscriptions and decommissions every server immediately.",
+      "delete": "Delete workspace"
+    }
+  },
+  "help": {
+    "title": "Help & support",
+    "subtitle": "Common questions and a direct line to the on-call engineer.",
+    "cards": {
+      "docs": {
+        "title": "Documentation",
+        "desc": "Setup guides, plugin recipes, and migration playbooks.",
+        "action": "Open docs"
+      },
+      "community": {
+        "title": "Community",
+        "desc": "Discord with 4k+ admins and our engineers active daily.",
+        "action": "Join Discord"
+      },
+      "support": {
+        "title": "Priority support",
+        "desc": "24/7 on-call for Pro plans. Email + phone bridge.",
+        "action": "Open ticket"
+      }
+    },
+    "faq": {
+      "title": "Frequently asked questions"
+    },
+    "message": {
+      "title": "Send a message",
+      "subtitle": "Describe what's going on. The on-call engineer pages back within 2 hours during EU business hours, otherwise next business day.",
+      "placeholder": "What's broken or confusing?",
+      "send": "Send"
+    }
+  },
+  "login": {
+    "welcome": "Welcome back",
+    "subtitle": "Sign in to manage your servers.",
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign in",
+    "demoNote": "This is a demo. Any email + password works."
+  },
+  "common": {
+    "copy": "Copy",
+    "copied": "Copied",
+    "close": "Close",
+    "open": "Open",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "filter": "Filter",
+    "all": "All",
+    "online": "Online",
+    "offline": "Offline",
+    "starting": "Starting",
+    "restarting": "Restarting",
+    "completed": "Completed",
+    "inProgress": "In progress",
+    "failed": "Failed",
+    "scheduled": "Scheduled",
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Info"
+  },
+  "timezones": {
+    "kyiv": "Europe/Kyiv",
+    "london": "Europe/London",
+    "newYork": "America/New_York",
+    "singapore": "Asia/Singapore"
+  },
+  "regions": {
+    "euWest": "EU West (Frankfurt)",
+    "euCentral": "EU Central (Helsinki)",
+    "usEast": "US East (Virginia)",
+    "usWest": "US West (Oregon)",
+    "asiaSingapore": "Asia (Singapore)"
+  },
+  "languages": {
+    "en": "English",
+    "uk": "Українська",
+    "de": "Deutsch",
+    "es": "Español"
+  }
+}

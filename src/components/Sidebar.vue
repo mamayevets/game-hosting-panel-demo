@@ -5,7 +5,10 @@ import {
   Server, CreditCard, UserCircle, LogOut,
   Plus, Mail, Settings, HelpCircle, Search,
   Activity, Database, FileText, Sparkles, ChevronUp,
+  Globe, Crown,
 } from 'lucide-vue-next'
+import { useI18n } from 'vue-i18n'
+import { setLocale, availableLocales, type Locale } from '@/i18n'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -17,6 +20,7 @@ const emit = defineEmits<{ quickCreate: []; openSearch: []; navigate: [] }>()
 
 const auth = useAuthStore()
 const router = useRouter()
+const { t, locale } = useI18n()
 
 const initials = computed(() => {
   const name = auth.email ?? 'demo'
@@ -28,21 +32,26 @@ function handleLogout() {
   router.push({ name: 'login' })
 }
 
+function switchLanguage(code: Locale) {
+  setLocale(code)
+}
+
 const primaryNav = [
-  { name: 'servers', label: 'Servers', icon: Server },
-  { name: 'billing', label: 'Billing', icon: CreditCard },
-  { name: 'account', label: 'Account', icon: UserCircle },
+  { name: 'servers', labelKey: 'sidebar.nav.servers', icon: Server },
+  { name: 'billing', labelKey: 'sidebar.nav.billing', icon: CreditCard },
+  { name: 'subscription', labelKey: 'sidebar.nav.subscription', icon: Crown },
+  { name: 'account', labelKey: 'sidebar.nav.account', icon: UserCircle },
 ] as const
 
 const resourceNav = [
-  { name: 'activity', label: 'Activity log', icon: Activity },
-  { name: 'backups', label: 'Backups', icon: Database },
-  { name: 'api-reference', label: 'API reference', icon: FileText },
+  { name: 'activity', labelKey: 'sidebar.nav.activity', icon: Activity },
+  { name: 'backups', labelKey: 'sidebar.nav.backups', icon: Database },
+  { name: 'api-reference', labelKey: 'sidebar.nav.apiReference', icon: FileText },
 ] as const
 
 const bottomNav = [
-  { name: 'settings', label: 'Settings', icon: Settings },
-  { name: 'help', label: 'Help & support', icon: HelpCircle },
+  { name: 'settings', labelKey: 'sidebar.nav.settings', icon: Settings },
+  { name: 'help', labelKey: 'sidebar.nav.help', icon: HelpCircle },
 ] as const
 </script>
 
@@ -56,19 +65,35 @@ const bottomNav = [
         <Sparkles class="h-3.5 w-3.5 text-background" />
       </div>
       <div class="flex-1 min-w-0">
-        <p class="text-sm font-semibold leading-none truncate">Test Panel</p>
-        <p class="text-[10px] text-muted-foreground mt-1 uppercase tracking-wider">Hosting Demo</p>
+        <p class="text-sm font-semibold leading-none truncate">{{ t('sidebar.title') }}</p>
+        <p class="text-[10px] text-muted-foreground mt-1 uppercase tracking-wider">{{ t('sidebar.subtitle') }}</p>
       </div>
     </div>
 
-    <div class="px-3 pt-1 pb-3 flex items-center gap-1">
+    <div class="px-3 pt-1 pb-2 flex items-center gap-1">
       <Button class="flex-1 justify-start gap-2 h-8" size="sm" @click="emit('quickCreate'); emit('navigate')">
         <Plus class="h-3.5 w-3.5" />
-        <span class="text-xs font-semibold">Quick Create</span>
+        <span class="text-xs font-semibold">{{ t('sidebar.quickCreate') }}</span>
       </Button>
       <Button variant="outline" size="icon" class="h-8 w-8 shrink-0" aria-label="Inbox" @click="emit('navigate')">
         <Mail class="h-3.5 w-3.5" />
       </Button>
+    </div>
+
+    <div class="px-3 pb-2">
+      <DropdownMenu>
+        <DropdownMenuTrigger as-child>
+          <Button variant="ghost" size="sm" class="w-full justify-start gap-2 h-8 text-xs text-muted-foreground">
+            <Globe class="h-3.5 w-3.5" />
+            <span>{{ locale === 'uk' ? 'Українська' : 'English' }}</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start" class="w-40">
+          <DropdownMenuItem v-for="loc in availableLocales" :key="loc.code" :class="locale === loc.code ? 'bg-sidebar-accent' : ''" @click="switchLanguage(loc.code)">
+            {{ loc.label }}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
 
     <Separator />
@@ -90,7 +115,7 @@ const bottomNav = [
           @click="(e: MouseEvent) => { navigate(e); emit('navigate') }"
         >
           <component :is="item.icon" class="h-4 w-4" />
-          {{ item.label }}
+          {{ t(item.labelKey) }}
         </a>
       </RouterLink>
       <RouterLink
@@ -109,7 +134,7 @@ const bottomNav = [
           @click="(e: MouseEvent) => { navigate(e); emit('navigate') }"
         >
           <component :is="item.icon" class="h-4 w-4" />
-          {{ item.label }}
+          {{ t(item.labelKey) }}
         </a>
       </RouterLink>
     </nav>
@@ -133,7 +158,7 @@ const bottomNav = [
           @click="(e: MouseEvent) => { navigate(e); emit('navigate') }"
         >
           <component :is="item.icon" class="h-4 w-4" />
-          {{ item.label }}
+          {{ t(item.labelKey) }}
         </a>
       </RouterLink>
       <button
@@ -142,9 +167,9 @@ const bottomNav = [
       >
         <span class="flex items-center gap-2.5">
           <Search class="h-4 w-4" />
-          Search
+          {{ t('sidebar.search') }}
         </span>
-        <kbd class="text-[10px] px-1.5 py-0.5 rounded bg-muted font-sans text-muted-foreground/70">⌘K</kbd>
+        <kbd class="text-[10px] px-1.5 py-0.5 rounded bg-muted font-sans text-muted-foreground/70">{{ t('sidebar.searchShortcut') }}</kbd>
       </button>
     </div>
 
@@ -158,7 +183,7 @@ const bottomNav = [
           </Avatar>
           <div class="flex-1 min-w-0">
             <p class="text-xs font-medium truncate">{{ auth.email }}</p>
-            <p class="text-[10px] text-muted-foreground">Owner</p>
+            <p class="text-[10px] text-muted-foreground">{{ t('sidebar.user.owner') }}</p>
           </div>
           <ChevronUp class="h-3.5 w-3.5 text-muted-foreground" />
         </button>
@@ -168,16 +193,16 @@ const bottomNav = [
         <DropdownMenuSeparator />
         <DropdownMenuItem @click="router.push({ name: 'account' }); emit('navigate')">
           <UserCircle class="h-4 w-4 mr-2" />
-          Account settings
+          {{ t('sidebar.user.accountSettings') }}
         </DropdownMenuItem>
         <DropdownMenuItem @click="router.push({ name: 'billing' }); emit('navigate')">
           <CreditCard class="h-4 w-4 mr-2" />
-          Billing
+          {{ t('sidebar.nav.billing') }}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem class="text-destructive focus:text-destructive" @click="handleLogout">
           <LogOut class="h-4 w-4 mr-2" />
-          Sign out
+          {{ t('sidebar.user.signOut') }}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

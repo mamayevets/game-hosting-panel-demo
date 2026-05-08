@@ -24,17 +24,22 @@ watch(() => route.fullPath, () => {
   mobileNavOpen.value = false
 })
 
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 const pageTitle = computed(() => {
   const map: Record<string, string> = {
-    servers: 'Dashboard',
-    'server-detail': 'Server',
-    billing: 'Billing',
-    account: 'Account',
-    activity: 'Activity log',
-    backups: 'Backups',
-    'api-reference': 'API reference',
-    settings: 'Settings',
-    help: 'Help & support',
+    servers: t('dashboard.title'),
+    'server-detail': t('sidebar.nav.servers'),
+    billing: t('sidebar.nav.billing'),
+    subscription: t('sidebar.nav.subscription'),
+    account: t('sidebar.nav.account'),
+    activity: t('sidebar.nav.activity'),
+    backups: t('sidebar.nav.backups'),
+    'api-reference': t('sidebar.nav.apiReference'),
+    settings: t('sidebar.nav.settings'),
+    help: t('sidebar.nav.help'),
   }
   return map[route.name as string] ?? 'Test Panel'
 })

@@ -31,6 +31,11 @@ const router = createRouter({
       component: () => import('@/pages/Billing.vue'),
     },
     {
+      path: '/subscription',
+      name: 'subscription',
+      component: () => import('@/pages/Subscription.vue'),
+    },
+    {
       path: '/account',
       name: 'account',
       component: () => import('@/pages/Account.vue'),
