@@ -70,8 +70,8 @@ function upgradeToPlan(name: string) {
       </CardHeader>
       <CardContent>
         <div class="flex items-center gap-3 p-4 bg-muted/40 rounded-lg border">
-          <div class="h-10 w-14 rounded-md bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center">
-            <CreditCard class="h-5 w-5 text-white" />
+          <div class="h-10 w-14 rounded-md bg-foreground flex items-center justify-center">
+            <CreditCard class="h-5 w-5 text-background" />
           </div>
           <div class="flex-1">
             <p class="text-sm font-medium">Visa ending in 4242</p>

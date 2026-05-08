@@ -14,7 +14,7 @@ import { toast } from 'vue-sonner'
 const auth = useAuthStore()
 
 const profile = ref({
-  fullName: 'Max Mamay',
+  fullName: 'Mamay',
   email: auth.email ?? 'demo@godlike.host',
   company: 'Mamay Studios',
   timezone: 'Europe/Kyiv',

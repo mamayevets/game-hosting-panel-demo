@@ -223,7 +223,7 @@ const playersLatest = computed(() => playerHistory.value[playerHistory.value.len
                 <p class="text-[11px] uppercase tracking-wide text-muted-foreground font-semibold">CPU</p>
                 <p class="text-lg font-bold tabular-nums">{{ cpuLatest }}%</p>
               </div>
-              <ResourceChart label="CPU" :values="cpuHistory" color="#6366f1" unit="%" />
+              <ResourceChart label="CPU" :values="cpuHistory" color="hsl(0 0% 95%)" unit="%" />
             </CardContent>
           </Card>
           <Card>
@@ -232,7 +232,7 @@ const playersLatest = computed(() => playerHistory.value[playerHistory.value.len
                 <p class="text-[11px] uppercase tracking-wide text-muted-foreground font-semibold">RAM ({{ server.ramGb }} GB)</p>
                 <p class="text-lg font-bold tabular-nums">{{ ramLatest }}%</p>
               </div>
-              <ResourceChart label="RAM" :values="ramHistory" color="#10b981" unit="%" />
+              <ResourceChart label="RAM" :values="ramHistory" color="hsl(0 0% 75%)" unit="%" />
             </CardContent>
           </Card>
           <Card>
@@ -241,7 +241,7 @@ const playersLatest = computed(() => playerHistory.value[playerHistory.value.len
                 <p class="text-[11px] uppercase tracking-wide text-muted-foreground font-semibold">Players</p>
                 <p class="text-lg font-bold tabular-nums">{{ playersLatest }} / {{ server.playersMax }}</p>
               </div>
-              <ResourceChart label="Players" :values="playerHistory" color="#f59e0b" :max="server.playersMax" />
+              <ResourceChart label="Players" :values="playerHistory" color="hsl(0 0% 55%)" :max="server.playersMax" />
             </CardContent>
           </Card>
         </div>

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Loader2, Gamepad2 } from 'lucide-vue-next'
+import { Loader2, Sparkles } from 'lucide-vue-next'
 import { motion } from 'motion-v'
 
 const router = useRouter()
@@ -25,44 +25,47 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-background via-background to-muted/40 relative overflow-hidden">
-    <div class="absolute inset-0 -z-10 opacity-40 dark:opacity-20" aria-hidden="true">
-      <div class="absolute -top-1/2 left-1/4 w-[600px] h-[600px] rounded-full bg-primary/30 blur-3xl" />
-      <div class="absolute -bottom-1/2 right-1/4 w-[600px] h-[600px] rounded-full bg-blue-500/30 blur-3xl" />
+  <div class="min-h-screen flex items-center justify-center px-4 bg-background relative overflow-hidden">
+    <div class="absolute inset-0 -z-10" aria-hidden="true">
+      <div
+        class="absolute inset-0 opacity-[0.07] dark:opacity-[0.04]"
+        style="background-image: radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0); background-size: 24px 24px"
+      />
+      <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[640px] h-[640px] rounded-full bg-foreground/[0.04] blur-3xl" />
     </div>
 
     <motion.div
       :initial="{ opacity: 0, y: 16 }"
       :animate="{ opacity: 1, y: 0 }"
       :transition="{ duration: 0.5, ease: 'easeOut' }"
-      class="w-full max-w-md"
+      class="w-full max-w-sm"
     >
-      <div class="text-center mb-6">
+      <div class="text-center mb-8">
         <motion.div
-          :initial="{ scale: 0.8, opacity: 0 }"
+          :initial="{ scale: 0.85, opacity: 0 }"
           :animate="{ scale: 1, opacity: 1 }"
-          :transition="{ delay: 0.1, type: 'spring', stiffness: 200 }"
-          class="h-14 w-14 mx-auto rounded-2xl bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center shadow-lg shadow-primary/30 ring-1 ring-white/10"
+          :transition="{ delay: 0.1, type: 'spring', stiffness: 220, damping: 18 }"
+          class="h-11 w-11 mx-auto rounded-xl bg-foreground flex items-center justify-center"
         >
-          <Gamepad2 class="h-7 w-7 text-primary-foreground" />
+          <Sparkles class="h-5 w-5 text-background" />
         </motion.div>
-        <h1 class="mt-5 text-2xl font-bold tracking-tight">Welcome to Godlike</h1>
-        <p class="text-sm text-muted-foreground mt-1.5">Sign in to manage your game servers</p>
+        <h1 class="mt-5 text-xl font-semibold tracking-tight">Welcome back</h1>
+        <p class="text-sm text-muted-foreground mt-1.5">Sign in to your Godlike hosting panel</p>
       </div>
 
-      <Card class="border-border/60 shadow-xl shadow-foreground/5 backdrop-blur supports-[backdrop-filter]:bg-card/80">
-        <CardHeader class="pb-4">
-          <CardTitle class="text-lg">Sign in</CardTitle>
-          <CardDescription>Demo build · any email and password works.</CardDescription>
+      <Card>
+        <CardHeader class="pb-4 space-y-1">
+          <CardTitle class="text-base">Sign in</CardTitle>
+          <CardDescription class="text-xs">Demo build · any email and password works</CardDescription>
         </CardHeader>
         <CardContent>
           <form class="space-y-4" @submit.prevent="handleSubmit">
             <div class="space-y-1.5">
-              <Label for="email">Email</Label>
+              <Label for="email" class="text-xs">Email</Label>
               <Input id="email" v-model="email" type="email" required autocomplete="email" />
             </div>
             <div class="space-y-1.5">
-              <Label for="password">Password</Label>
+              <Label for="password" class="text-xs">Password</Label>
               <Input id="password" v-model="password" type="password" required autocomplete="current-password" />
             </div>
             <Button type="submit" class="w-full" :disabled="submitting">
@@ -73,8 +76,8 @@ async function handleSubmit() {
         </CardContent>
       </Card>
 
-      <p class="text-center text-xs text-muted-foreground/80 mt-6">
-        Concept demo by Mamay · UI for the Godlike full-stack interview
+      <p class="text-center text-xs text-muted-foreground mt-6">
+        Concept demo · UI for the Godlike full-stack interview
       </p>
     </motion.div>
   </div>
