@@ -205,10 +205,8 @@ const stats = computed(() => [
             </div>
           </div>
 
-          <TabsContent :value="tab" force-mount>
-            <motion.div :initial="{ opacity: 0, y: 4 }" :animate="{ opacity: 1, y: 0 }" :transition="{ duration: 0.2 }">
-            <Card class="overflow-hidden">
-              <div class="overflow-x-auto">
+          <TabsContent :value="tab">
+            <Card class="overflow-hidden min-h-[420px] transition-all duration-200">
               <Table class="min-w-[860px]">
                 <TableHeader class="bg-muted/40">
                   <TableRow class="hover:bg-transparent">
@@ -276,9 +274,7 @@ const stats = computed(() => [
                   </TableRow>
                 </TableBody>
               </Table>
-              </div>
             </Card>
-            </motion.div>
           </TabsContent>
         </Tabs>
       </motion.div>
