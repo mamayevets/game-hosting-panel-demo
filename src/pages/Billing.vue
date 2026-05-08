@@ -66,9 +66,9 @@ function notify(label: string, description?: string) {
       :animate="{ opacity: 1, y: 0 }"
       :transition="{ duration: 0.4, delay: 0.05 }"
     >
-      <Card class="overflow-hidden border-border/60">
-        <CardContent class="p-4 sm:p-6">
-          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 min-w-0">
+      <Card class="overflow-hidden border-border/60 max-w-full">
+        <CardContent class="p-4 sm:p-6 max-w-full overflow-hidden">
+          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 min-w-0 max-w-full">
             <div class="space-y-1.5 min-w-0 w-full sm:w-auto">
               <div class="flex items-center gap-2 flex-wrap">
                 <Badge class="bg-emerald-500/10 text-emerald-500 border-emerald-500/20 hover:bg-emerald-500/10">
@@ -81,19 +81,18 @@ function notify(label: string, description?: string) {
                 Renews <span class="font-medium text-foreground">{{ nextCharge.date }}</span> · Visa · 4242
               </p>
             </div>
-            <div class="grid grid-cols-2 sm:flex gap-2 sm:shrink-0 w-full sm:w-auto">
-              <Button variant="outline" size="sm" class="gap-1.5 w-full sm:w-auto min-w-0" @click="notify('Update payment', 'Routes to Stripe customer portal.')">
+            <div class="flex items-stretch gap-2 w-full sm:w-auto sm:shrink-0">
+              <Button variant="outline" size="sm" class="flex-1 sm:flex-initial gap-1.5 min-w-0 overflow-hidden" @click="notify('Update payment', 'Routes to Stripe customer portal.')">
                 <CreditCard class="h-3.5 w-3.5 shrink-0" />
                 <span class="truncate">Update card</span>
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger as-child>
-                  <Button variant="outline" size="sm" class="gap-1.5 w-full sm:w-auto min-w-0">
-                    <span class="truncate">Manage</span>
-                    <MoreHorizontal class="h-3.5 w-3.5 shrink-0" />
+                  <Button variant="outline" size="icon" class="h-9 w-9 shrink-0" aria-label="More billing actions">
+                    <MoreHorizontal class="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" class="w-44">
+                <DropdownMenuContent align="end" class="w-56">
                   <DropdownMenuItem @click="notify('Pause subscription', 'Servers stay live for 14 days.')">Pause subscription</DropdownMenuItem>
                   <DropdownMenuItem @click="notify('Switch to annual', 'Save 17% with annual billing.')">Switch to annual</DropdownMenuItem>
                   <DropdownMenuSeparator />
